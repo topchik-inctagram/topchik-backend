@@ -1,0 +1,164 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../prisma/client"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  nickname  String    @unique @db.VarChar(200)
+  email     String    @unique @db.VarChar(500)
+  hash      String    @db.VarChar(500)
+  createdAt DateTime  @default(now()) @db.Timestamptz
+  updatedAt DateTime  @updatedAt @db.Timestamptz
+  deletedAt DateTime? @db.Timestamptz
+
+  confirmation Confirmation? @relation
+  sessions     Device[]
+  recovery     Recovery?     @relation
+  providers    Provider[]
+  profile      Profile?      @relation
+
+  posts Post[]
+
+  @@map("Users")
+}
+
+enum ConfirmationStatus {
+  CONFIRM
+  NOT_CONFIRM
+}
+
+model Confirmation {
+  id     Int                @id @default(autoincrement())
+  userId Int                @unique
+  user   User               @relation(fields: [userId], references: [id])
+  code   String?            @unique @default(uuid()) @db.Uuid
+  exp    DateTime?          @db.Timestamptz
+  status ConfirmationStatus @default(NOT_CONFIRM)
+
+  @@map("Confirmations")
+}
+
+model Device {
+  id     String @id @db.Uuid
+  title  String @db.VarChar(200)
+  ip     String @db.VarChar(200)
+  exp    Int
+  iat    Int
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("Devices")
+}
+
+enum RecoveryStatus {
+  DONE
+  IN_PROGRESS
+}
+
+model Recovery {
+  id     Int            @id @default(autoincrement())
+  userId Int            @unique
+  user   User           @relation(fields: [userId], references: [id])
+  code   String?        @unique @default(uuid()) @db.Uuid
+  exp    DateTime?      @db.Timestamptz
+  status RecoveryStatus @default(DONE)
+
+  @@map("Recoveries")
+}
+
+enum ProviderType {
+  GOOGLE
+  GIT_HUB
+}
+
+model Provider {
+  id         Int          @id @default(autoincrement())
+  providerId String
+  createdAt  DateTime     @default(now()) @db.Timestamptz
+  updatedAt  DateTime     @updatedAt @db.Timestamptz
+  type       ProviderType
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("Providers")
+}
+
+model Profile {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime?
+  aboutMe     String?
+
+  cityId Int?
+  city   City? @relation(fields: [cityId], references: [id])
+
+  countryId Int?
+  country   Country? @relation(fields: [countryId], references: [id])
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  avatarId String?
+
+  @@map("Profiles")
+}
+
+model Country {
+  id      Int    @id @default(autoincrement())
+  name_ru String @unique
+  name_en String @unique
+  cities  City[]
+  profiles   Profile[]
+
+  @@map("Countries")
+}
+
+model City {
+  id        Int       @id @default(autoincrement())
+  name_ru   String
+  name_en   String
+  countryId Int
+  country   Country   @relation(fields: [countryId], references: [id])
+  profiles   Profile[]
+
+  @@map("Cities")
+}
+
+model Post {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  description String?
+
+  createdAt DateTime  @default(now()) @db.Timestamptz
+  updatedAt DateTime  @updatedAt @db.Timestamptz
+  deletedAt DateTime? @db.Timestamptz
+
+  images PostImage[]
+
+  @@map("Posts")
+}
+
+model PostImage {
+  id        Int       @id @default(autoincrement())
+  key       String
+  originUrl       String @default("")
+  smallUrl        String @default("")
+  mediumUrl       String @default("")
+  postId    Int
+  post      Post      @relation(fields: [postId], references: [id])
+  createdAt DateTime  @default(now()) @db.Timestamptz
+  updatedAt DateTime  @updatedAt @db.Timestamptz
+  deletedAt DateTime? @db.Timestamptz
+
+  @@map("PostImages")
+}
