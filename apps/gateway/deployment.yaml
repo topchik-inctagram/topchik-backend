@@ -137,6 +137,16 @@ spec:
                  secretKeyRef:
                    name: topchik-backend-production-config-secret
                    key: RECOVERY_REDIRECT
+             - name: RECOVERY_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: RECOVERY_URL
+             - name: REGISTRATION_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: REGISTRATION_URL
              - name: DATABASE_URL
                valueFrom:
                  secretKeyRef:
