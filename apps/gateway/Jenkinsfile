@@ -3,13 +3,13 @@ pipeline {
     agent any
     environment {
         ENV_TYPE = "production"
-        PORT = 3518
-        NAMESPACE = "inctagram-world"
-        REGISTRY_HOSTNAME = "tolkunio"
-        PROJECT = "gateway-service"
+        PORT = 3805
+        NAMESPACE = "topchik-uk"
+        REGISTRY_HOSTNAME = "topchikinctagram"
+        PROJECT = "topchik-backend"
         SERVICE="gateway"
         REGISTRY = "registry.hub.docker.com"
-        DEPLOYMENT_NAME = "gateway-service-deployment"
+        DEPLOYMENT_NAME = "topchik-backend-deployment"
         IMAGE_NAME = "${env.BUILD_ID}_${env.ENV_TYPE}_${env.GIT_COMMIT}"
         DOCKER_BUILD_NAME = "${env.REGISTRY_HOSTNAME}/${env.PROJECT}:${env.IMAGE_NAME}"
     }
@@ -28,7 +28,7 @@ pipeline {
                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                        nvm use --lts
                        yarn install
-                       yarn test:gateway:unit
+                       yarn test
                     '''
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
                        export NVM_DIR="$HOME/.nvm"
                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                        nvm use --lts
-                       yarn test:gateway:e2e
+                       yarn test:e2e
                     '''
                 }
             }
@@ -58,7 +58,7 @@ pipeline {
              steps {
                  echo "Push image started..."
                      script {
-                        docker.withRegistry("https://${env.REGISTRY}", 'inctagram-world') {
+                        docker.withRegistry("https://${env.REGISTRY}", 'topchik-uk') {
                             app.push("${env.IMAGE_NAME}")
                         }
                      }
