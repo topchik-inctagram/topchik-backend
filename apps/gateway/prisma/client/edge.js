@@ -230,7 +230,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\ME\\Desktop\\projects\\inc-backend\\apps\\gateway\\prisma\\client",
+      "value": "C:\\Users\\ME\\Desktop\\projects\\topchik-backend\\apps\\gateway\\prisma\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -252,7 +252,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\ME\\Desktop\\projects\\inc-backend\\apps\\gateway\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\ME\\Desktop\\projects\\topchik-backend\\apps\\gateway\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

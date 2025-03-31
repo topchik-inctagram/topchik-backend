@@ -26,14 +26,6 @@ import { CurrentUserIdAndDeviceId } from '../../../../../../../common/decorators
 import { DeleteDeviceCommand } from '../../../devices/application/use.cases/delete-device.use-case';
 import { UpdateDeviceCommand } from '../../../devices/application/use.cases/update-device.use-case';
 import { NewPassDto } from '../dtos/auth/new-pass.dto';
-import { RegistrationSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/registration.swagger.decorator';
-import { RegistrationConfirmationSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/registration-confirmation.swagger.decorator';
-import { RegistrationEmailResendingSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/registration-email-resending.swagger.decorator';
-import { LoginSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/login.swagger.decorator';
-import { RefreshTokenSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/refresh-token.swagger.decorator';
-import { LogoutSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/logout.swagger.decorator';
-import { PasswordRecoverySwaggerDecorator } from '../../../../../core/swagger/auth/decorators/password-recovery.swagger.decorator';
-import { NewPasswordSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/new-password.swagger.decorator';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { PassRecoveryCommand } from '../../application/use.cases/pass-recovery.use-case';
 import { Result } from '../../../../../core/results/result';
@@ -42,23 +34,20 @@ import { GoogleOauthGuard } from '../../guards/google.guard';
 import { ProviderInfo } from '../../decorators/provider-info.decorator';
 import { ProviderInputType } from '../../decorators/provider.type';
 import { GoogleLoginCommand } from '../../application/use.cases/google-login.use-case';
-import { GoogleAuthSwagger } from '../../../../../core/swagger/auth/decorators/google.swagger.decorator';
-import { GoogleAuthRedirectSwagger } from '../../../../../core/swagger/auth/decorators/google-redirect.swagger.decorator';
 import { GithubOauthGuard } from '../../guards/github.guard';
 import { GithubLoginCommand } from '../../application/use.cases/github-login.use-case';
-import { GithubAuthSwagger } from '../../../../../core/swagger/auth/decorators/github.swagger.decorator';
-import { GithubAuthRedirectSwagger } from '../../../../../core/swagger/auth/decorators/github-redirect.swagger.decorator';
 import { CheckRecoveryCommand } from '../../application/use.cases/check-recovery.use-case';
 import { RecoveryDto } from '../dtos/auth/recovery.dto';
-import { CheckRecoverySwaggerDecorator } from '../../../../../core/swagger/auth/decorators/check-recovery.swagger.decorator';
 import { PassRecoveryDto } from '../dtos/auth/pass-recovery.dto';
 import { RecaptchaGuard } from '../../guards/recaptcha.guard';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../../../core/config/configuration';
 import { FrontRedirectSettings } from '../../../../../core/config/front-redirect.settings';
 import { AccessTokenGuard } from '../../guards/access.guard';
-import { MeSwaggerDecorator } from '../../../../../core/swagger/auth/decorators/me.swagger.decorator';
-import { UNAUTHORIZED } from '../../../../../core/swagger/swagger.constants';
+import {
+  BAD_REQUEST,
+  UNAUTHORIZED,
+} from '../../../../../core/swagger/swagger.constants';
 import { AsyncStorageAdapter } from '../../../../../core/adapters/local-storage/local-storage.adapter';
 import { CurrentIp } from '../../../../../../../common/decorators/current-ip.decorator';
 import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
@@ -66,6 +55,9 @@ import { GetProfileQueryCommand } from '../../../profile/application/query.cases
 import { UserView } from '../../../../../core/views/user.view';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { PayloadType } from '../../../../../core/adapters/jwt/jwt.adapter';
+import { ApiResponseFactory } from '../../../../../common/swagger/api-responses/api-response.factory';
+import { AuthSwagger } from '../../../../../core/swagger/auth/auth.enum';
+import { ProfileEnum } from '../../../../../core/swagger/profile/profile.enum';
 
 export class ResponseAccessTokenDto {
   @ApiProperty()
@@ -93,7 +85,11 @@ export class AuthController {
   }
 
   @Post('registration')
-  @RegistrationSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.registration, {
+    204: AuthSwagger.registrationOk,
+    400: null,
+    429: AuthSwagger.throttler,
+  })
   @UseGuards(ThrottlerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async createUser(@Body() userDto: RegistrationInputDto): Promise<void> {
@@ -105,7 +101,11 @@ export class AuthController {
   }
 
   @Post('registration-confirmation')
-  @RegistrationConfirmationSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.confirm, {
+    204: AuthSwagger.confirmOk,
+    400: null,
+    429: AuthSwagger.throttler,
+  })
   @UseGuards(ThrottlerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registrationConfirmation(
@@ -119,7 +119,11 @@ export class AuthController {
   }
 
   @Post('registration-email-resending')
-  @RegistrationEmailResendingSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.resending, {
+    204: AuthSwagger.resendingOk,
+    400: null,
+    429: AuthSwagger.throttler,
+  })
   @UseGuards(ThrottlerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async registrationEmailResending(
@@ -133,7 +137,11 @@ export class AuthController {
   }
 
   @Post('login')
-  @LoginSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.login, {
+    200: { body: ResponseAccessTokenDto, message: AuthSwagger.jwtOk },
+    400: BAD_REQUEST,
+    429: AuthSwagger.throttler,
+  })
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   async login(
@@ -153,7 +161,11 @@ export class AuthController {
   }
 
   @Post('refresh-token')
-  @RefreshTokenSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.rT, {
+    200: { body: ResponseAccessTokenDto, message: AuthSwagger.jwtOk },
+    401: null,
+    cookie: true,
+  })
   @UseGuards(RefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
   async updateTokens(
@@ -172,7 +184,11 @@ export class AuthController {
   }
 
   @Post('logout')
-  @LogoutSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.logout, {
+    204: null,
+    401: null,
+    cookie: true,
+  })
   @UseGuards(RefreshTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(
@@ -188,7 +204,12 @@ export class AuthController {
   }
 
   @Post('password-recovery')
-  @PasswordRecoverySwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.passRecovery, {
+    204: AuthSwagger.passRecoveryOk,
+    400: null,
+    403: 'Если проверка recaptcha провалилась',
+    429: AuthSwagger.throttler,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(ThrottlerGuard, RecaptchaGuard)
   async passwordRecovery(@Body() { email }: PassRecoveryDto) {
@@ -201,7 +222,10 @@ export class AuthController {
   }
 
   @Post('check-recovery-code')
-  @CheckRecoverySwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.checkRecovery, {
+    200: null,
+    400: null,
+  })
   @HttpCode(HttpStatus.OK)
   async checkRecoveryCode(@Body() { recoveryCode }: RecoveryDto) {
     const result = await this.commandBus.execute<CheckRecoveryCommand, Result>(
@@ -212,7 +236,11 @@ export class AuthController {
   }
 
   @Post('new-password')
-  @NewPasswordSwaggerDecorator()
+  @ApiResponseFactory(AuthSwagger.newPass, {
+    204: null,
+    400: null,
+    429: AuthSwagger.throttler,
+  })
   @UseGuards(ThrottlerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async newPassword(
@@ -226,14 +254,20 @@ export class AuthController {
   }
 
   @Get('google')
-  @GoogleAuthSwagger()
+  @ApiResponseFactory(AuthSwagger.google, {
+    200: { message: AuthSwagger.googleOk },
+    401: null,
+  })
   @UseGuards(GoogleOauthGuard)
   async googleAuth() {
     return;
   }
 
   @Get('google/redirect')
-  @GoogleAuthRedirectSwagger()
+  @ApiResponseFactory(AuthSwagger.googleRedirect, {
+    200: { message: AuthSwagger.googleRedirectOk },
+    401: null,
+  })
   @UseGuards(GoogleOauthGuard)
   async googleAuthRedirect(
     @ProviderInfo() { providerId, type, email }: ProviderInputType,
@@ -253,14 +287,20 @@ export class AuthController {
   }
 
   @Get('github')
-  @GithubAuthSwagger()
+  @ApiResponseFactory(AuthSwagger.github, {
+    200: { message: AuthSwagger.githubOk },
+    401: null,
+  })
   @UseGuards(GithubOauthGuard)
   githubAuth() {
     return;
   }
 
   @Get('github/redirect')
-  @GithubAuthRedirectSwagger()
+  @ApiResponseFactory(AuthSwagger.githubRedirect, {
+    200: { message: AuthSwagger.githubRedirectOk },
+    401: null,
+  })
   @UseGuards(GithubOauthGuard)
   async githubAuthRedirect(
     @ProviderInfo() { providerId, type, email }: ProviderInputType,
@@ -280,7 +320,11 @@ export class AuthController {
   }
 
   @Get('me')
-  @MeSwaggerDecorator()
+  @ApiResponseFactory(ProfileEnum.myProfile, {
+    200: { body: UserView },
+    401: null,
+    bearer: true,
+  })
   @UseGuards(AccessTokenGuard)
   async getUserInfo(
     @CurrentUserId() { userId }: PayloadType,

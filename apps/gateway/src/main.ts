@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { configApp } from './core/config/app.config';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from './core/config/configuration';
-import { swaggerSetup } from './core/config/swagger/global.swagger';
+import { swaggerSetup } from './common/swagger/global.swagger';
 import { getAppConnectSettings } from '../../common/config/get-app-connect-settings';
 import { AppLoggerService } from '../../common/logger/logger.service';
 
