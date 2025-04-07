@@ -44,10 +44,7 @@ import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../../../core/config/configuration';
 import { FrontRedirectSettings } from '../../../../../core/config/front-redirect.settings';
 import { AccessTokenGuard } from '../../guards/access.guard';
-import {
-  BAD_REQUEST,
-  UNAUTHORIZED,
-} from '../../../../../core/swagger/swagger.constants';
+import { UNAUTHORIZED } from '../../../../../core/swagger/swagger.constants';
 import { AsyncStorageAdapter } from '../../../../../core/adapters/local-storage/local-storage.adapter';
 import { CurrentIp } from '../../../../../../../common/decorators/current-ip.decorator';
 import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
@@ -139,7 +136,7 @@ export class AuthController {
   @Post('login')
   @ApiResponseFactory(AuthSwagger.login, {
     200: { body: ResponseAccessTokenDto, message: AuthSwagger.jwtOk },
-    400: BAD_REQUEST,
+    400: null,
     429: AuthSwagger.throttler,
   })
   @UseGuards(LocalAuthGuard)

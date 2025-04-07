@@ -257,7 +257,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "..",
   "clientVersion": "6.1.0",
@@ -285,8 +286,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
-    "prisma/client",
-    "client",
+    "apps/gateway/prisma/client",
+    "gateway/prisma/client",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -315,15 +316,15 @@ Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "prisma/client/query_engine-windows.dll.node")
+path.join(process.cwd(), "apps/gateway/prisma/client/query_engine-windows.dll.node")
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-debian-openssl-1.1.x.so.node")
+path.join(process.cwd(), "apps/gateway/prisma/client/libquery_engine-debian-openssl-1.1.x.so.node")
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
-path.join(process.cwd(), "prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node")
+path.join(process.cwd(), "apps/gateway/prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "prisma/client/schema.prisma")
+path.join(process.cwd(), "apps/gateway/prisma/client/schema.prisma")

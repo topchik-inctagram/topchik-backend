@@ -8,13 +8,13 @@ import {
   DecodedTokenType,
   PayloadType,
 } from '../../../../core/adapters/jwt/jwt.adapter';
-import { DevicesRepo } from '../../devices/repos/device.repo';
+import { UserRepo } from '../repos/user.repo';
 
 @Injectable()
 export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   constructor(
     private configService: ConfigService<Configuration, true>,
-    private readonly devicesRepository: DevicesRepo,
+    private readonly usersRepository: UserRepo,
   ) {
     const config = configService.get('jwtSettings');
 
@@ -29,12 +29,9 @@ export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   ): Promise<{ userId: number }> {
     if (!payload) throw new UnauthorizedError('Wrong credentials');
 
-    const device = await this.devicesRepository.findById(payload.deviceId);
+    const user = await this.usersRepository.findById(payload.userId);
 
-    if (!device) throw new UnauthorizedError('Wrong credentials');
-
-    if (payload.iat !== device.iat)
-      throw new UnauthorizedError('Wrong credentials');
+    if (!user) throw new UnauthorizedError('Wrong credentials');
 
     return { userId: payload.userId };
   }

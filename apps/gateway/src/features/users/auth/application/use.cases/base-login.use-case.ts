@@ -33,7 +33,7 @@ export abstract class BaseLoginUseCase {
 
     const payload = {
       userId,
-      deviceId: id,
+      deviceId: randomUUID(),
     };
 
     const refreshToken = await this.jwtAdapter.createRefreshToken(payload);
