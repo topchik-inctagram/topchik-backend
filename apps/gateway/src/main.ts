@@ -14,11 +14,14 @@ async function bootstrap() {
     logger: appLogger,
   });
 
-  configApp(app);
-
   const configService = app.get(ConfigService<Configuration, true>);
 
-  const { apiPrefix, port } = await getAppConnectSettings(app, configService);
+  const { apiPrefix, port, domain } = await getAppConnectSettings(
+    app,
+    configService,
+  );
+
+  configApp(app, domain);
 
   swaggerSetup(app, apiPrefix);
 

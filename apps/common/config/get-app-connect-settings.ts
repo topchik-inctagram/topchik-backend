@@ -11,7 +11,9 @@ export async function getAppConnectSettings(
   });
   const port = configService.get('apiSettings.PORT', { infer: true });
 
+  const domain = configService.get('apiSettings.DOMAIN', { infer: true });
+
   app.setGlobalPrefix(apiPrefix);
 
-  return { port, apiPrefix };
+  return { port, apiPrefix, domain };
 }
