@@ -12,6 +12,8 @@ import { RecaptchaSettings } from './recaptcha.settings';
 import { FrontRedirectSettings } from './front-redirect.settings';
 import { StorageServiceSettings } from './storage-service.settings';
 import { BaseConfiguration } from '../../../../common/config/base.configuration';
+import { join } from 'path';
+import { existsSync } from 'fs';
 
 export type EnvironmentVariable = Record<string, string | undefined>;
 
@@ -59,6 +61,8 @@ export class Configuration extends BaseConfiguration {
       storageServiceSettings: new StorageServiceSettings(environmentVariables),
     });
     config.checkError();
+
+    console.log(config.databaseSettings.DATABASE_URL);
     return config;
   }
 }
@@ -69,10 +73,17 @@ export default () => {
   return Configuration.createConfig(environmentVariables);
 };
 
+function checkTestFiles(): string {
+  const localTestPath = join(process.cwd(), '.env.gateway.test.local');
+  return existsSync(localTestPath)
+    ? '.env.gateway.test.local'
+    : '.env.gateway.test';
+}
+
 export const getFilePath = (env: Environments) => {
   switch (env) {
     case Environments.TEST:
-      return '.env.gateway.test';
+      return checkTestFiles();
     case Environments.STAGING:
       return '.env.gateway.staging';
     case Environments.DEVELOPMENT:
@@ -80,6 +91,6 @@ export const getFilePath = (env: Environments) => {
     case Environments.PRODUCTION:
       return '.env.gateway.production';
     default:
-      return '.env';
+      return '.env.a';
   }
 };

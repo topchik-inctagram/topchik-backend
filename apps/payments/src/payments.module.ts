@@ -15,7 +15,7 @@ const envs = process.env.ENV as Environments;
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [getFilePath(envs), '.env'],
+      envFilePath: [getFilePath(envs), '.env.a'],
       load: [configuration],
     }),
     DatabaseModule,

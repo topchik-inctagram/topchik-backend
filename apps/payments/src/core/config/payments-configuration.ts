@@ -52,14 +52,14 @@ export default () => {
 export const getFilePath = (env: Environments) => {
   switch (env) {
     case Environments.TEST:
-      return '.env.payments.test';
+      return '.env.a.payments.test';
     case Environments.STAGING:
-      return '.env.payments.staging';
+      return '.env.a.payments.staging';
     case Environments.DEVELOPMENT:
-      return '.env.payments.develop';
+      return '.env.a.payments.develop';
     case Environments.PRODUCTION:
-      return '.env.payments.production';
+      return '.env.a.payments.production';
     default:
-      return '.env';
+      return '.env.a';
   }
 };

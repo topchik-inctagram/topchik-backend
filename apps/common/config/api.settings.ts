@@ -9,4 +9,7 @@ export class ApiSettings {
 
   @IsString()
   API_PREFIX: string = this.environmentVariables.API_PREFIX;
+
+  @IsString()
+  DOMAIN: string = this.environmentVariables.PROD_DOMAIN;
 }

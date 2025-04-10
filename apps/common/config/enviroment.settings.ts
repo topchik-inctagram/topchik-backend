@@ -6,6 +6,7 @@ export enum Environments {
   STAGING = 'STAGING',
   PRODUCTION = 'PRODUCTION',
   TEST = 'TEST',
+  LOCAL_TEST = 'LOCAL_TEST',
 }
 
 export class EnvironmentSettings {
