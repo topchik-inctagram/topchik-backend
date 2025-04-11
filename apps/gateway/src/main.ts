@@ -25,6 +25,7 @@ async function bootstrap() {
 
   swaggerSetup(app, apiPrefix);
 
+  appLogger.log(`DOMAIN: ${domain}`);
   appLogger.log(`PORT: ${port}`);
   appLogger.log(`prefix: ${apiPrefix}`);
 

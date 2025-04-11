@@ -62,7 +62,6 @@ export class Configuration extends BaseConfiguration {
     });
     config.checkError();
 
-    console.log(config.databaseSettings.DATABASE_URL);
     return config;
   }
 }
