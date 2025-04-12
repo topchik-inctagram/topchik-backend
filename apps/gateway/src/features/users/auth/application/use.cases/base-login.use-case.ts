@@ -29,11 +29,11 @@ export abstract class BaseLoginUseCase {
     ip,
     userId,
   }: BaseLoginInputType): Promise<Result<TokensType>> {
-    const id = randomUUID();
+    const deviceId = randomUUID();
 
     const payload = {
       userId,
-      deviceId: randomUUID(),
+      deviceId,
     };
 
     const refreshToken = await this.jwtAdapter.createRefreshToken(payload);
@@ -45,7 +45,7 @@ export abstract class BaseLoginUseCase {
 
     // create device session and save it
     const newDevice = {
-      id,
+      id: deviceId,
       title,
       ip,
       exp: tokenInfo.exp,

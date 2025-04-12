@@ -17,7 +17,13 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     private readonly configService: ConfigService<Configuration, true>,
     private readonly devicesRepository: DevicesRepo,
   ) {
-    const config = configService.get('jwtSettings');
+    const refreshTokenSecret = configService.get(
+      'jwtSettings.REFRESH_TOKEN_SECRET',
+      {
+        infer: true,
+      },
+    );
+
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
@@ -27,7 +33,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: config.REFRESH_TOKEN_SECRET,
+      secretOrKey: refreshTokenSecret,
     });
   }
 

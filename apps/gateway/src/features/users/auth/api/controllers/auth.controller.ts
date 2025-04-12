@@ -39,7 +39,6 @@ import { GithubLoginCommand } from '../../application/use.cases/github-login.use
 import { CheckRecoveryCommand } from '../../application/use.cases/check-recovery.use-case';
 import { RecoveryDto } from '../dtos/auth/recovery.dto';
 import { PassRecoveryDto } from '../dtos/auth/pass-recovery.dto';
-import { RecaptchaGuard } from '../../guards/recaptcha.guard';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../../../core/config/configuration';
 import { FrontRedirectSettings } from '../../../../../core/config/front-redirect.settings';
@@ -204,11 +203,11 @@ export class AuthController {
   @ApiResponseFactory(AuthSwagger.passRecovery, {
     204: AuthSwagger.passRecoveryOk,
     400: null,
-    403: 'Если проверка recaptcha провалилась',
-    429: AuthSwagger.throttler,
+    // 403: 'Если проверка recaptcha провалилась',
+    // 429: AuthSwagger.throttler,
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(ThrottlerGuard, RecaptchaGuard)
+  // @UseGuards(ThrottlerGuard, RecaptchaGuard)
   async passwordRecovery(@Body() { email }: PassRecoveryDto) {
     const result = await this.commandBus.execute<PassRecoveryCommand, Result>(
       new PassRecoveryCommand(email),
