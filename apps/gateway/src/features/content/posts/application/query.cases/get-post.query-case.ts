@@ -6,8 +6,8 @@ import {
 } from '../../../../../../../common/exeptions/custom.exeption';
 import { PostsMessages } from '../../../../../core/constants/message.constants';
 import { PostRepo } from '../../repos/post.repo';
-import { ImageService } from '../../../../../core/adapters/image/image.adapter';
-import { PostView } from '../../../../../core/views/post.view';
+import { ImageService } from '../../../../../common/adapters/image/image.adapter';
+import { PostView } from '../../../../../common/views/post.view';
 
 export class GetPostQueryCommand {
   constructor(public postId: number) {}

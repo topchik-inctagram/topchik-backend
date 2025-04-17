@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PostRepo } from '../../repos/post.repo';
-import { PublicPostsWithCursorView } from '../../../../../core/views/posts-with-cursor.view';
+import { PublicPostsWithCursorView } from '../../../../../common/views/posts-with-cursor.view';
 
 export class GetPostsQueryCommand {
   constructor(public cursor?: number) {}

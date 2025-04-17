@@ -7,7 +7,7 @@ import { UnauthorizedError } from '../../../../../../common/exeptions/custom.exe
 import {
   DecodedTokenType,
   PayloadType,
-} from '../../../../core/adapters/jwt/jwt.adapter';
+} from '../../../../common/adapters/jwt/jwt.adapter';
 import { UserRepo } from '../repos/user.repo';
 
 @Injectable()

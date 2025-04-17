@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DevicesRepo } from '../../repos/device.repo';
-import { JwtAdapter } from '../../../../../core/adapters/jwt/jwt.adapter';
+import { JwtAdapter } from '../../../../../common/adapters/jwt/jwt.adapter';
 import { BaseLoginUseCase } from '../../../auth/application/use.cases/base-login.use-case';
 import { Result } from '../../../../../core/results/result';
 

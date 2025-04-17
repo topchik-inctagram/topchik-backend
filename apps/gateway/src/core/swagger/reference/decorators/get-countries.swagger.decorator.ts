@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { ReferenceEnum } from '../reference.enum';
-import { CountryView } from '../../../views/country.view';
+import { CountryView } from '../../../../common/views/country.view';
 
 export function getCountriesSwaggerDecorator() {
   return applyDecorators(

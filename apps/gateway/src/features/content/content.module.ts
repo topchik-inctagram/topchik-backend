@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ImageService } from '../../core/adapters/image/image.adapter';
+import { ImageService } from '../../common/adapters/image/image.adapter';
 import { HttpModule } from '@nestjs/axios';
 import { PostRepo } from './posts/repos/post.repo';
 import { CreatePostUseCase } from './posts/application/use.cases/create-post.use-case';

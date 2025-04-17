@@ -6,7 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { NOT_FOUND } from '../../swagger.constants';
 import { PostsEnum } from '../posts.enum';
-import { PostView } from '../../../views/post.view';
+import { PostView } from '../../../../common/views/post.view';
 
 export function getPostByIdSwaggerDecorator() {
   return applyDecorators(

@@ -6,7 +6,7 @@ import {
 import { applyDecorators } from '@nestjs/common';
 import { DevicesEnum } from './devices.enum';
 import { OK, UNAUTHORIZED } from '../swagger.constants';
-import { DeviceViewModel } from '../../views/device.view';
+import { DeviceViewModel } from '../../../common/views/device.view';
 
 export function MyDevicesSwaggerDecorator() {
   return applyDecorators(

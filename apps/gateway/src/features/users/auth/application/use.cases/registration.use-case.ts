@@ -2,7 +2,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { IUserRepo, UserRepo } from '../../repos/user.repo';
 import { Inject } from '@nestjs/common';
 import { RegistrationInputDto } from '../../api/dtos/auth/registration.dto';
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { CreateUserEvent } from '../../events/create-user.event';
 import { randomUUID } from 'crypto';
 import { add } from 'date-fns';
@@ -45,7 +45,7 @@ export class RegistrationUseCase
   async execute({
     userDto: { username, password, email },
   }: RegistrationCommand): Promise<Result> {
-    const isUserExist = await this.userRepo.findByEmailOrNick({
+    const isUserExist: UserEntity = await this.userRepo.findByEmailOrNick({
       nickname: username,
       email,
     });
@@ -74,7 +74,7 @@ export class RegistrationUseCase
   }
 
   private async validateUser(
-    user,
+    user: UserEntity,
     nickname: string,
     password: string,
     email: string,

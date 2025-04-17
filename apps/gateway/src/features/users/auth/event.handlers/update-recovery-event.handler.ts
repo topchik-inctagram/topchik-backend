@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { MailService } from '../../../../core/adapters/mailer/mail.service';
+import { MailService } from '../../../../common/adapters/mailer/mail.service';
 import { UpdateRecoveryEvent } from '../events/update-recovery.event';
 
 @EventsHandler(UpdateRecoveryEvent)

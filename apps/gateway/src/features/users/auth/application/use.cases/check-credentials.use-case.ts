@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { IUserRepo, UserRepo } from '../../repos/user.repo';
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { Result } from '../../../../../core/results/result';
 
 import { UserMessages } from '../../../../../core/constants/message.constants';

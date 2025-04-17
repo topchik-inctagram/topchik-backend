@@ -1,6 +1,6 @@
 import { CreateUserEvent } from '../events/create-user.event';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { MailService } from '../../../../core/adapters/mailer/mail.service';
+import { MailService } from '../../../../common/adapters/mailer/mail.service';
 
 @EventsHandler(CreateUserEvent)
 export class CreateUserEventHandler implements IEventHandler<CreateUserEvent> {

@@ -7,7 +7,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ProfileEnum } from '../profile.enum';
-import { UserView } from '../../../views/user.view';
+import { UserView } from '../../../../common/views/user.view';
 import { NOT_FOUND, UNAUTHORIZED } from '../../swagger.constants';
 
 export function MyProfileSwaggerDecorator() {

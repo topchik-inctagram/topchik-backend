@@ -17,8 +17,8 @@ import { DeleteAllDevicesExceptThisCommand } from '../../application/use.cases/d
 import { MyDevicesSwaggerDecorator } from '../../../../../core/swagger/devices/my-devices.swagger.decorator';
 import { DeleteDeviceSwaggerDecorator } from '../../../../../core/swagger/devices/delete-device.swagger.decorator';
 import { DeleteAllExceptThisSwaggerDecorator } from '../../../../../core/swagger/devices/delete-all-exept-this.swagger.decorator';
-import { DeviceViewModel } from '../../../../../core/views/device.view';
-import { PayloadType } from '../../../../../core/adapters/jwt/jwt.adapter';
+import { DeviceViewModel } from '../../../../../common/views/device.view';
+import { PayloadType } from '../../../../../common/adapters/jwt/jwt.adapter';
 
 @ApiTags('Devices')
 @ApiCookieAuth()

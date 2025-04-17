@@ -7,7 +7,7 @@ import { DevicesRepo } from '../../devices/repos/device.repo';
 import {
   DecodedTokenType,
   PayloadType,
-} from '../../../../core/adapters/jwt/jwt.adapter';
+} from '../../../../common/adapters/jwt/jwt.adapter';
 import { Configuration } from '../../../../core/config/configuration';
 import { UnauthorizedError } from '../../../../../../common/exeptions/custom.exeption';
 

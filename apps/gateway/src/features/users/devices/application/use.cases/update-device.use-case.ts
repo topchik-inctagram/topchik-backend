@@ -5,7 +5,7 @@ import {
   DecodedTokenType,
   JwtAdapter,
   PayloadType,
-} from '../../../../../core/adapters/jwt/jwt.adapter';
+} from '../../../../../common/adapters/jwt/jwt.adapter';
 import { Result } from '../../../../../core/results/result';
 
 export class UpdateDeviceCommand {

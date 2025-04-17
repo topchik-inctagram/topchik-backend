@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ImagesDto } from '../../../../../../../common/dtos/images.dto';
-import { ImageService } from '../../../../../core/adapters/image/image.adapter';
+import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 import { PostRepo } from '../../repos/post.repo';
-import { PostView } from '../../../../../core/views/post.view';
+import { PostView } from '../../../../../common/views/post.view';
 import { Result } from '../../../../../core/results/result';
 import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
 import { PostsMessages } from '../../../../../core/constants/message.constants';

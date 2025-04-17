@@ -115,6 +115,12 @@ export class UserEntity implements User {
     this.profile.aboutMe = aboutMe ?? null;
   }
 
+  updateHash(hash: string) {
+    this.hash = hash;
+  }
+
+  updateConfirmation() {}
+
   getThis(): Prisma.UserUncheckedUpdateInput {
     return {
       id: this.id,

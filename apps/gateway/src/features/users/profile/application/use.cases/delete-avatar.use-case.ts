@@ -7,7 +7,7 @@ import {
   AvatarMessages,
   UserMessages,
 } from '../../../../../core/constants/message.constants';
-import { ImageService } from '../../../../../core/adapters/image/image.adapter';
+import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 
 export class DeleteAvatarCommand {
   constructor(public userId: number) {}

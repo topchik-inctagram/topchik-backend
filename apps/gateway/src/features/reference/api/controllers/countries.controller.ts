@@ -1,9 +1,9 @@
 import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CountryQueryRepo } from '../query.repos/country.query.repo';
-import { CountryView } from '../../../../core/views/country.view';
+import { CountryView } from '../../../../common/views/country.view';
 import { getCountriesSwaggerDecorator } from '../../../../core/swagger/reference/decorators/get-countries.swagger.decorator';
-import { CityView } from '../../../../core/views/city.view';
+import { CityView } from '../../../../common/views/city.view';
 import { getCountryCitiesSwaggerDecorator } from '../../../../core/swagger/reference/decorators/get-country-cities.swagger.decorator';
 import { IdParamDto } from '../../../../../../common/dtos/id-param.dto';
 

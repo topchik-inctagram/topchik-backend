@@ -2,8 +2,8 @@ import { BaseProvideLoginUseCase } from './base-provider-login.use-case';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { IUserRepo, UserRepo } from '../../repos/user.repo';
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
-import { JwtAdapter } from '../../../../../core/adapters/jwt/jwt.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
+import { JwtAdapter } from '../../../../../common/adapters/jwt/jwt.adapter';
 import { DevicesRepo } from '../../../devices/repos/device.repo';
 
 export class GoogleLoginCommand {

@@ -1,9 +1,9 @@
 import { ProviderType } from '../../decorators/provider.type';
 import { Inject } from '@nestjs/common';
 import { IUserRepo, UserRepo } from '../../repos/user.repo';
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { BaseLoginUseCase } from './base-login.use-case';
-import { JwtAdapter } from '../../../../../core/adapters/jwt/jwt.adapter';
+import { JwtAdapter } from '../../../../../common/adapters/jwt/jwt.adapter';
 import { DevicesRepo } from '../../../devices/repos/device.repo';
 import { randomBytes } from 'crypto';
 import { UserEntity } from '../../../../global/application/db/domain/user.entity';

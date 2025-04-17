@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../../../global/application/db/db.service';
-import { CountView } from '../../../../../core/views/count.view';
+import { CountView } from '../../../../../common/views/count.view';
 
 @Injectable()
 export class UserQueryRepo {

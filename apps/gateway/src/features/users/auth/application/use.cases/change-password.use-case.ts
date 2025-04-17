@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { IUserRepo, UserRepo } from '../../repos/user.repo';
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { Result } from '../../../../../core/results/result';
 import { RecoveryType } from './pass-recovery.use-case';
 import { DevicesRepo } from '../../../devices/repos/device.repo';

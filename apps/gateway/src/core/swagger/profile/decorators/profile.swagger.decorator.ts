@@ -5,7 +5,7 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { NOT_FOUND } from '../../swagger.constants';
-import { UserView } from '../../../views/user.view';
+import { UserView } from '../../../../common/views/user.view';
 import { ProfileEnum } from '../profile.enum';
 
 export function ProfileSwaggerDecorator() {

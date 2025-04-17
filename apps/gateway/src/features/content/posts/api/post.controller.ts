@@ -29,7 +29,7 @@ import { ImagesDto } from '../../../../../../common/dtos/images.dto';
 import { UpdatePostCommand } from '../application/use.cases/update-post.use-case';
 import { DeletePostCommand } from '../application/use.cases/delete-post.use-case';
 import { DescriptionDto } from './dtos/description.dto';
-import { PostView } from '../../../../core/views/post.view';
+import { PostView } from '../../../../common/views/post.view';
 import { getPostByIdSwaggerDecorator } from '../../../../core/swagger/posts/decorators/get-post-by-id.swagger.decorator';
 import { DeletePostSwaggerDecorator } from '../../../../core/swagger/posts/decorators/delete-post.swagger.decorator';
 import { UpdatePostSwaggerDecorator } from '../../../../core/swagger/posts/decorators/update-post.swagger.decorator';
@@ -37,13 +37,13 @@ import { CreatePostSwaggerDecorator } from '../../../../core/swagger/posts/decor
 import { CursorQueryDto } from './dtos/cursor.dto';
 import { IdParamDto } from '../../../../../../common/dtos/id-param.dto';
 import { PostQueryRepo } from './query.repos/post.query.repo';
-import { PostsWithCursorView } from '../../../../core/views/posts-with-cursor.view';
+import { PostsWithCursorView } from '../../../../common/views/posts-with-cursor.view';
 import { GetUserPostsSwaggerDecorator } from '../../../../core/swagger/posts/decorators/get-user-posts.swagger.decorator';
 import { NotFoundError } from '../../../../../../common/exeptions/custom.exeption';
 import { PostsMessages } from '../../../../core/constants/message.constants';
 import { GetPostsSwaggerDecorator } from '../../../../core/swagger/posts/decorators/get-posts.swagger.decorator';
 import { GetPostsQueryCommand } from '../application/query.cases/get-posts.query-case';
-import { PayloadType } from '../../../../core/adapters/jwt/jwt.adapter';
+import { PayloadType } from '../../../../common/adapters/jwt/jwt.adapter';
 
 @ApiTags('Posts')
 @Controller('posts')

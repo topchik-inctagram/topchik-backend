@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Configuration } from '../../config/configuration';
-import { JwtSettings } from '../../config/jwt.settings';
+import { Configuration } from '../../../core/config/configuration';
+import { JwtSettings } from '../../../core/config/jwt.settings';
 
 export type PayloadType = {
   userId: number;

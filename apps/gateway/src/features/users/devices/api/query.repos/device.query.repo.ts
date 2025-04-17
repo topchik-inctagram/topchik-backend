@@ -1,6 +1,6 @@
 import { DbService } from '../../../../global/application/db/db.service';
 import { Injectable } from '@nestjs/common';
-import { DeviceViewModel } from '../../../../../core/views/device.view';
+import { DeviceViewModel } from '../../../../../common/views/device.view';
 
 @Injectable()
 export class DeviceQueryRepo {

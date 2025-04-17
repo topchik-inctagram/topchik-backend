@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { IUserRepo, UserRepo } from '../../../auth/repos/user.repo';
-import { ImageService } from '../../../../../core/adapters/image/image.adapter';
+import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 import { Result } from '../../../../../core/results/result';
 import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
 import {

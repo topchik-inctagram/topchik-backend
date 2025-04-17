@@ -1,4 +1,4 @@
-import { HashAdapter } from '../../../../../core/adapters/hash/hash.adapter';
+import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { randomUUID } from 'crypto';
 import { add } from 'date-fns';
 import { Inject } from '@nestjs/common';

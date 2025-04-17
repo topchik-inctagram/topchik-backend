@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { PostsEnum } from '../posts.enum';
 import { BAD_REQUEST, UNAUTHORIZED } from '../../swagger.constants';
-import { PostView } from '../../../views/post.view';
+import { PostView } from '../../../../common/views/post.view';
 import { BadRequestResponse } from '../../../../../../common/views/response.view';
 
 export function CreatePostSwaggerDecorator() {

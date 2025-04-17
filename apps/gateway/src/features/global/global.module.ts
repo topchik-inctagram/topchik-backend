@@ -1,7 +1,7 @@
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { OriginMiddleware } from './middlewares/origin.middleware';
 import { OriginService } from './application/origin/origin.adapter';
-import { AsyncStorageAdapter } from '../../core/adapters/local-storage/local-storage.adapter';
+import { AsyncStorageAdapter } from '../../common/adapters/local-storage/local-storage.adapter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DbService } from './application/db/db.service';

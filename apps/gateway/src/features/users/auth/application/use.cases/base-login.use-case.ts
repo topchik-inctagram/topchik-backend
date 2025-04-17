@@ -2,7 +2,7 @@ import {
   DecodedTokenType,
   JwtAdapter,
   PayloadType,
-} from '../../../../../core/adapters/jwt/jwt.adapter';
+} from '../../../../../common/adapters/jwt/jwt.adapter';
 import { DevicesRepo } from '../../../devices/repos/device.repo';
 import { Result } from '../../../../../core/results/result';
 import { randomUUID } from 'crypto';

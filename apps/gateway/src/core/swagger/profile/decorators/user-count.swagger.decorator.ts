@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { ProfileEnum } from '../profile.enum';
-import { CountView } from '../../../views/count.view';
+import { CountView } from '../../../../common/views/count.view';
 import { SUCCESS } from '../../../constants/message.constants';
 
 export function UserCountSwaggerDecorator() {

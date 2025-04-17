@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../core/config/configuration';
 import { FrontRedirectSettings } from '../../../core/config/front-redirect.settings';
-import { AsyncStorageAdapter } from '../../../core/adapters/local-storage/local-storage.adapter';
+import { AsyncStorageAdapter } from '../../../common/adapters/local-storage/local-storage.adapter';
 
 @Injectable()
 export class OriginMiddleware implements NestMiddleware {

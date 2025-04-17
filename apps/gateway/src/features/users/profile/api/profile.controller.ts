@@ -36,11 +36,11 @@ import { DeleteAvatarSwaggerDecorator } from '../../../../core/swagger/profile/d
 import { UploadAvatarSwaggerDecorator } from '../../../../core/swagger/profile/decorators/upload-avatar.swagger.decorator';
 import { GetProfileQueryCommand } from '../application/query.cases/get-profile.query-case';
 import { AvatarResponseView } from '../../../../../../common/views/avatar-response.view';
-import { UserView } from '../../../../core/views/user.view';
+import { UserView } from '../../../../common/views/user.view';
 import { IdParamDto } from '../../../../../../common/dtos/id-param.dto';
-import { CountView } from '../../../../core/views/count.view';
+import { CountView } from '../../../../common/views/count.view';
 import { UserCountSwaggerDecorator } from '../../../../core/swagger/profile/decorators/user-count.swagger.decorator';
-import { PayloadType } from '../../../../core/adapters/jwt/jwt.adapter';
+import { PayloadType } from '../../../../common/adapters/jwt/jwt.adapter';
 
 @ApiTags('Profile')
 @Controller('profile')

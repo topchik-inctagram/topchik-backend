@@ -2,8 +2,8 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { NotFoundError } from '../../../../../../../common/exeptions/custom.exeption';
 import { NOT_FOUND } from '../../../../../core/swagger/swagger.constants';
 import { Result } from '../../../../../core/results/result';
-import { UserView } from '../../../../../core/views/user.view';
-import { ImageService } from '../../../../../core/adapters/image/image.adapter';
+import { UserView } from '../../../../../common/views/user.view';
+import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 import { CountryRepo } from '../../../../reference/repos/country-repo';
 import { UserQueryRepo } from '../../api/query.repos/user.query.repo';
 

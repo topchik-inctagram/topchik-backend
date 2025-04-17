@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../../global/application/db/db.service';
-import { CountryView } from '../../../../core/views/country.view';
-import { CityView } from '../../../../core/views/city.view';
+import { CountryView } from '../../../../common/views/country.view';
+import { CityView } from '../../../../common/views/city.view';
 
 @Injectable()
 export class CountryQueryRepo {

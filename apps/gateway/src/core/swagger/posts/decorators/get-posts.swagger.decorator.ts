@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { PostsEnum } from '../posts.enum';
-import { PublicPostsWithCursorView } from '../../../views/posts-with-cursor.view';
+import { PublicPostsWithCursorView } from '../../../../common/views/posts-with-cursor.view';
 
 export function GetPostsSwaggerDecorator() {
   return applyDecorators(

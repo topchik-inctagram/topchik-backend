@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../../../global/application/db/db.service';
-import { PostView } from '../../../../../core/views/post.view';
+import { PostView } from '../../../../../common/views/post.view';
 import { ImageResponseView } from '../../../../../../../common/views/image-response.view';
 import { Prisma } from '../../../../../../prisma/client';
-import { PostsWithCursorView } from '../../../../../core/views/posts-with-cursor.view';
+import { PostsWithCursorView } from '../../../../../common/views/posts-with-cursor.view';
 
 export const USER_POST_LIMIT = 8;
 export const POST_LIMIT = 4;
