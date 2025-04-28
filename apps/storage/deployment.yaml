@@ -22,48 +22,48 @@ spec:
              - containerPort: PORT_CONTAINER
 
            env:
-             - name: API_PREFIX
+             - name: PROD_DOMAIN
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
-                   key: API_PREFIX
+                   name: storage-backend-production-config-secret
+                   key: PROD_DOMAIN
              - name: DATABASE_URL
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: DATABASE_URL
              - name: S3_REGION
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: S3_REGION
              - name: S3_ENDPOINT
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: S3_ENDPOINT
              - name: S3_KEY_ID
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: S3_KEY_ID
              - name: S3_KEY_SECRET
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: S3_KEY_SECRET
              - name: S3_PATH
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: S3_PATH
              - name: BUCKET_NAME
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
+                   name: storage-backend-production-config-secret
                    key: BUCKET_NAME
-             - name: ENV
+             - name: API_PREFIX
                valueFrom:
                  secretKeyRef:
-                   name: storage-service-production-config-secret
-                   key: ENV
+                   name: storage-backend-production-config-secret
+                   key: API_PREFIX
