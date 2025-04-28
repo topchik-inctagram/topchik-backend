@@ -4,8 +4,8 @@ import { initTestingModule } from '../common/testing.module';
 import {
   RegistrationCommand,
   RegistrationUseCase,
-} from '../../src/features/users/auth/application/use.cases/registration.use-case';
-import { RegistrationInputDto } from '../../src/features/users/auth/api/dtos/auth/registration.dto';
+} from '../../src/modules/users/auth/application/use.cases/registration.use-case';
+import { RegistrationInputDto } from '../../src/modules/users/auth/api/dtos/registration.dto';
 
 describe('Registration INT tests', () => {
   let app: INestApplication;

@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { UserModule } from '../../features/users/user.module';
-import { ContentModule } from '../../features/content/content.module';
-import { ReferenceModule } from '../../features/reference/reference.module';
+import { UserModule } from '../../modules/users/user.module';
+import { ContentModule } from '../../modules/content/content.module';
+import { ReferenceModule } from '../../modules/reference/reference.module';
 
 export const swaggerSetup = (app: INestApplication, apiPrefix: string) => {
   const options = new DocumentBuilder()

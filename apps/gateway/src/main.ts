@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { configApp } from './core/config/app.config';
+import { configApp } from './common/app/app-setup';
 import { ConfigService } from '@nestjs/config';
-import { Configuration } from './core/config/configuration';
+import { Configuration } from './common/config/configuration';
 import { swaggerSetup } from './common/swagger/global.swagger';
 import { getAppConnectSettings } from '../../common/config/get-app-connect-settings';
 import { AppLoggerService } from '../../common/logger/logger.service';
