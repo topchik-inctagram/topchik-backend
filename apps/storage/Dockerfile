@@ -32,4 +32,4 @@ RUN npm run build:${SERVICE}
 
 EXPOSE ${PORT}
 
-CMD npm run 'start:prod:storage'
+CMD npm run 'start:storage'
