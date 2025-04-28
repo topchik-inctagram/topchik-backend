@@ -14,7 +14,7 @@ export class PingDbUseCase {
     this.logger.setContext(PingDbUseCase.name);
   }
 
-  @Cron('*/1 * * * *') // Каждые 4 минуты
+  @Cron('*/4 * * * *') // Каждые 4 минуты
   public async pingDatabase() {
     try {
       await this.dataSource.query('SELECT 1');
