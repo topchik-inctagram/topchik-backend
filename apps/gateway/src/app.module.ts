@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AppController } from './common/app/app.controller';
 import { ConfigModule } from '@nestjs/config';
-import configuration, { getFilePath } from './core/config/configuration';
+import configuration, { getFilePath } from './common/config/configuration';
 import { Environments } from '../../common/config/enviroment.settings';
-import { UserModule } from './features/users/user.module';
-import { OriginModule } from './features/global/global.module';
-import { ContentModule } from './features/content/content.module';
-import { ReferenceModule } from './features/reference/reference.module';
+import { UserModule } from './modules/users/user.module';
+import { OriginModule } from './common/global/global.module';
+import { ContentModule } from './modules/content/content.module';
+import { ReferenceModule } from './modules/reference/reference.module';
+import { DatabaseModule } from './common/db/database.module';
 
 const envs = process.env.ENV as Environments;
 
@@ -17,6 +18,7 @@ const envs = process.env.ENV as Environments;
       envFilePath: [getFilePath(envs), '.env'],
       load: [configuration],
     }),
+    DatabaseModule,
     OriginModule,
     UserModule,
     ContentModule,

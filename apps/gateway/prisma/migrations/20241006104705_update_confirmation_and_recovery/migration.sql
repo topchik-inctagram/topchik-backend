@@ -1,7 +1,0 @@
--- AlterTable
-ALTER TABLE "Confirmations" ALTER COLUMN "code" DROP NOT NULL,
-ALTER COLUMN "exp" DROP NOT NULL;
-
--- AlterTable
-ALTER TABLE "Recoveries" ALTER COLUMN "code" DROP NOT NULL,
-ALTER COLUMN "exp" DROP NOT NULL;

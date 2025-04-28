@@ -1,4 +1,4 @@
-import { EnvironmentVariable } from '../../gateway/src/core/config/configuration';
+import { EnvironmentVariable } from '../../gateway/src/common/config/configuration';
 import { IsNumber, IsString } from 'class-validator';
 
 export class ApiSettings {

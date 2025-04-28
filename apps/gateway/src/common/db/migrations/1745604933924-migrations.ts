@@ -1,0 +1,61 @@
+import { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class Migrations1745604933924 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `INSERT INTO "country" (id, name_ru, name_en) VALUES
+                                                          (1, 'Россия', 'Russia'),
+                                                          (2, 'США', 'United States'),
+                                                          (3, 'Франция', 'France'),
+                                                          (4, 'Германия', 'Germany'),
+                                                          (5, 'Италия', 'Italy'),
+                                                          (6, 'Испания', 'Spain'),
+                                                          (7, 'Китай', 'China'),
+                                                          (8, 'Япония', 'Japan'),
+                                                          (9, 'Индия', 'India'),
+                                                          (10, 'Бразилия', 'Brazil'),
+                                                          (11, 'Канада', 'Canada'),
+                                                          (12, 'Австралия', 'Australia'),
+                                                          (13, 'Мексика', 'Mexico'),
+                                                          (14, 'Великобритания', 'United Kingdom'),
+                                                          (15, 'Новая Зеландия', 'New Zealand'),
+                                                          (16, 'Южноафриканская Республика', 'South Africa'),
+                                                          (17, 'Индонезия', 'Indonesia'),
+                                                          (18, 'Аргентина', 'Argentina'),
+                                                          (19, 'Турция', 'Turkey'),
+                                                          (20, 'Норвегия', 'Norway'),
+                                                          (21, 'Швеция', 'Sweden'),
+                                                          (22, 'Дания', 'Denmark'),
+                                                          (23, 'Финляндия', 'Finland'),
+                                                          (24, 'Ирландия', 'Ireland'),
+                                                          (25, 'Польша', 'Poland'),
+                                                          (26, 'Чехия', 'Czech Republic'),
+                                                          (27, 'Словакия', 'Slovakia'),
+                                                          (28, 'Греция', 'Greece'),
+                                                          (29, 'Португалия', 'Portugal'),
+                                                          (30, 'Хорватия', 'Croatia'),
+                                                          (31, 'Румыния', 'Romania'),
+                                                          (32, 'Болгария', 'Bulgaria'),
+                                                          (33, 'Сербия', 'Serbia'),
+                                                          (34, 'Венгрия', 'Hungary'),
+                                                          (35, 'Австрия', 'Austria'),
+                                                          (36, 'Швейцария', 'Switzerland'),
+                                                          (37, 'Беларусь', 'Belarus'),
+                                                          (38, 'Украина', 'Ukraine'),
+                                                          (39, 'Молдова', 'Moldova'),
+                                                          (40, 'Казахстан', 'Kazakhstan'),
+                                                          (41, 'Узбекистан', 'Uzbekistan'),
+                                                          (42, 'Таджикистан', 'Tajikistan'),
+                                                          (43, 'Кыргызстан', 'Kyrgyzstan'),
+                                                          (44, 'Грузия', 'Georgia'),
+                                                          (45, 'Армения', 'Armenia'),
+                                                          (46, 'Азербайджан', 'Azerbaijan'),
+                                                          (47, 'Сирия', 'Syria'),
+                                                          (48, 'Ирак', 'Iraq'),
+                                                          (49, 'Иран', 'Iran'),
+                                                          (50, 'Израиль', 'Israel');`,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {}
+}

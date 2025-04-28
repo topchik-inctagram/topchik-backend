@@ -3,11 +3,11 @@ import { Environments } from '../../common/config/enviroment.settings';
 import { UploadsController } from './uploads.controller';
 import configuration, {
   getFilePath,
-} from './core/config/storage-configuration';
-import { ImageModule } from './features/images/image.module';
+} from './common/config/storage-configuration';
+import { ImageModule } from './modules/images/image.module';
 import { AppLoggerService } from '../../common/logger/logger.service';
 import { Module } from '@nestjs/common';
-import { DbModule } from './core/db/db.module';
+import { DbModule } from './common/db/db.module';
 
 const envs = process.env.ENV as Environments;
 

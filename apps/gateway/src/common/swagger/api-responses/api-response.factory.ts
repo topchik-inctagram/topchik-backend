@@ -9,14 +9,18 @@ import {
   OK_STATUS,
   TOO_MANY_REQUESTS_STATUS,
   UNAUTHORIZED_STATUS,
-} from '../../../core/swagger/swagger.constants';
+} from '../swagger.constants';
 
 const AUTH_BEARER = 'bearer';
 const AUTH_COOKIE = 'cookie';
 
+const ONE_IMAGE = 'one_image';
+const MANY_IMAGE = 'many_images';
+
 type SuccessResponse<B = null> = {
   message: string;
   body: B;
+  array?: boolean;
 };
 
 type ApiResponses<B = null> = {
@@ -33,6 +37,9 @@ type ApiResponses<B = null> = {
   [AUTH_COOKIE]: boolean;
   // basic: boolean;
   // role: boolean;
+
+  [ONE_IMAGE]: string;
+  [MANY_IMAGE]: string;
 };
 
 export function ApiResponseFactory<T>(
@@ -49,7 +56,11 @@ export function ApiResponseFactory<T>(
     switch (apiResponse) {
       case OK_STATUS:
         responses.push(
-          ApiResponseAdapter.getOkResponse(response?.message, response?.body),
+          ApiResponseAdapter.getOkResponse(
+            response?.message,
+            response?.body,
+            response?.array,
+          ),
         );
         break;
       case CREATED_STATUS:
@@ -84,6 +95,15 @@ export function ApiResponseFactory<T>(
         break;
       case AUTH_COOKIE:
         responses.push(ApiResponseAdapter.getCookieAuth());
+        break;
+
+      case ONE_IMAGE:
+        responses.push(...ApiResponseAdapter.getImageBodyResponse(response));
+        break;
+      case MANY_IMAGE:
+        responses.push(
+          ...ApiResponseAdapter.getImageListBodyResponse(response),
+        );
         break;
     }
   }
