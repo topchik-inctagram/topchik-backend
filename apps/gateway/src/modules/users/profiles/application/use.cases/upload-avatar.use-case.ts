@@ -72,8 +72,8 @@ export class UploadAvatarUseCase
       user.profile.createAvatar(imageId);
     }
 
-    const avatar = await this.userRepo.saveAvatar(user.profile.avatar);
+    const profile = await this.userRepo.saveProfile(user.profile);
 
-    return Result.Ok(avatar.id);
+    return Result.Ok(profile.avatar.id);
   }
 }
