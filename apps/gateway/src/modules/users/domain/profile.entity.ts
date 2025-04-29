@@ -26,11 +26,11 @@ export class Profile extends BaseEntity {
   @Column()
   userId: number;
 
-  @OneToOne(() => Avatar, (ava) => ava.profile, { onDelete: 'CASCADE' })
+  @OneToOne(() => Avatar, (ava) => ava.profile, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
   avatar: Avatar;
-
-  @Column({ nullable: true })
-  avatarId: number | null;
 
   @OneToOne(() => Country)
   @JoinColumn()

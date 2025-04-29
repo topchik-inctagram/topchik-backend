@@ -23,13 +23,16 @@ export class DeleteAvatarUseCase
       return Result.Err(new BadRequestError(UserMessages.NOT_EXIST, 'id'));
     }
 
-    if (!user.profile.avatarId) {
+    console.log(user.profile);
+    console.log(user.profile.avatar);
+
+    if (!user.profile.avatar) {
       return Result.Err(
         new BadRequestError(AvatarMessages.AVATAR_NOT_EXIST, 'avatar'),
       );
     }
 
-    await this.userRepo.deleteAvatar(user.profile.avatarId);
+    await this.userRepo.deleteAvatar(user.profile.avatar.id);
 
     return Result.Ok();
   }

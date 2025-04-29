@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CountView } from '../../../common/views/count.view';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../domain/user.entity';
-import { IsNull, Not, Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Avatar } from '../domain/avatar.entity';
 import { ImageView } from '../../../common/views/image.view';
 
@@ -28,6 +28,11 @@ export class UserQueryRepo {
       },
       where: {
         id,
+        profile: {
+          avatar: {
+            deletedAt: IsNull(),
+          },
+        },
       },
     });
     if (!user) return null;
@@ -38,7 +43,7 @@ export class UserQueryRepo {
   async getUserCount(): Promise<CountView> {
     const count = await this.userRepository.count({
       where: {
-        deletedAt: Not(IsNull()),
+        deletedAt: IsNull(),
       },
     });
 
@@ -49,6 +54,7 @@ export class UserQueryRepo {
     const avatar = await this.avatarRepository.findOne({
       where: {
         id,
+        deletedAt: IsNull(),
       },
       relations: {
         image: true,

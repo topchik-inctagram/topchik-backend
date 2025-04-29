@@ -29,5 +29,7 @@ export class Avatar extends BaseEntity {
 
   update(imageId: number) {
     this.imageId = imageId;
+    this.deletedAt = null;
+    this.createdAt = new Date();
   }
 }
