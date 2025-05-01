@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PostImage } from '../../gateway/prisma/client';
-
-export type ImageDataResponse = {
-  id: string;
-  smallFilePath: string;
-  mediumFilePath: string;
-  originFilePath: string;
-};
+import { ImageEntity } from '../../storage/src/modules/images/domain/image.entity';
 
 export class ImageResponseView {
   @ApiProperty()
@@ -21,27 +14,17 @@ export class ImageResponseView {
   @ApiProperty()
   originFilePath: string;
 
-  create({
-    id,
-    originFilePath,
-    smallFilePath,
-    mediumFilePath,
-  }: ImageDataResponse) {
-    this.id = id;
-    this.mediumFilePath = mediumFilePath;
-    this.smallFilePath = smallFilePath;
-    this.originFilePath = originFilePath;
-  }
+  @ApiProperty()
+  index: number;
 
-  static build(img: PostImage) {
+  static create(image: ImageEntity, path: string): ImageResponseView {
     const instance = new this();
 
-    instance.create({
-      id: img.key,
-      originFilePath: img.originUrl,
-      smallFilePath: img.smallUrl,
-      mediumFilePath: img.mediumUrl,
-    });
+    instance.id = image.id;
+    instance.mediumFilePath = path + image.small;
+    instance.smallFilePath = path + image.medium;
+    instance.originFilePath = path + image.original;
+    instance.index = image.index;
 
     return instance;
   }

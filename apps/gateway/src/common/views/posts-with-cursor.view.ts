@@ -1,9 +1,8 @@
 import { PostView } from './post.view';
 import { ApiProperty } from '@nestjs/swagger';
-import { Post, PostImage, Profile, User } from '../../../prisma/client';
-import { ImageResponseView } from '../../../../common/views/image-response.view';
 import { PublicPostView } from './public-post.view';
-import { AvatarResponseView } from '../../../../common/views/avatar-response.view';
+import { Post } from '../../modules/content/posts/domain/post.entity';
+import { POST_LIMIT } from '../../modules/content/posts/repos/post.query.repo';
 
 export class PostsWithCursorView {
   @ApiProperty({ isArray: true, type: PostView })
@@ -12,48 +11,40 @@ export class PostsWithCursorView {
   @ApiProperty()
   cursor: number;
 
-  static build(posts: (Post & { images?: PostImage[] })[], cursor?: number) {
+  @ApiProperty()
+  hasNextPage: boolean;
+
+  static builder(posts: Post[]) {
     const result = new this();
 
-    result.cursor = cursor ?? 0;
-    result.posts = posts.map((post) =>
-      PostView.builder(
-        post,
-        post.images.map((img) => ImageResponseView.build(img)),
-      ),
-    );
+    result.hasNextPage = posts.length > POST_LIMIT;
+
+    if (result.hasNextPage) {
+      posts.pop(); //если есть доп пост, то мутируем исходник и удаляем лишнее
+    }
+
+    result.cursor = posts[posts.length - 1]?.id ?? 0;
+    result.posts = posts.map((post) => PostView.builder(post));
 
     return result;
   }
 }
 
-export class PublicPostsWithCursorView {
+export class PublicPostsWithCursorView extends PostsWithCursorView {
   @ApiProperty({ isArray: true, type: PublicPostView })
   posts: PublicPostView[];
 
-  @ApiProperty()
-  cursor: number;
-
-  static build(
-    posts: (Post & { images?: PostImage[] } & {
-      user: User & {
-        profile?: Profile;
-      };
-    })[],
-    cursor: number,
-    avatarInfo?: AvatarResponseView,
-  ) {
+  static builder(posts: Post[]) {
     const result = new this();
 
-    result.cursor = cursor ?? 0;
-    result.posts = posts.map((post) =>
-      PublicPostView.build(
-        post,
-        post.images.map((img) => ImageResponseView.build(img)),
-        post.user,
-        avatarInfo,
-      ),
-    );
+    result.hasNextPage = posts.length > POST_LIMIT;
+
+    if (result.hasNextPage) {
+      posts.pop(); //если есть доп пост, то мутируем исходник и удаляем лишнее
+    }
+
+    result.cursor = posts[posts.length - 1]?.id ?? 0;
+    result.posts = posts.map((post) => PublicPostView.builder(post));
 
     return result;
   }

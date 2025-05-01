@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Configuration } from '../../../core/config/configuration';
-import { JwtSettings } from '../../../core/config/jwt.settings';
+import { Configuration } from '../../config/configuration';
+import { JwtSettings } from '../../config/settings/jwt.settings';
 
-export type PayloadType = {
+export type AccessPayloadType = {
+  userId: number;
+};
+
+export type RefreshPayloadType = {
   userId: number;
   deviceId: string;
 };
@@ -25,14 +29,14 @@ export class JwtAdapter {
     this.jwtConfig = this.configService.get('jwtSettings');
   }
 
-  async createRefreshToken(payload: PayloadType): Promise<string> {
+  async createRefreshToken(payload: RefreshPayloadType): Promise<string> {
     return this.jwtService.signAsync(payload, {
       expiresIn: this.jwtConfig.REFRESH_TOKEN_EXP,
       secret: this.jwtConfig.REFRESH_TOKEN_SECRET,
     });
   }
 
-  async createAccessToken(payload: PayloadType): Promise<string> {
+  async createAccessToken(payload: AccessPayloadType): Promise<string> {
     return this.jwtService.signAsync(payload, {
       expiresIn: this.jwtConfig.ACCESS_TOKEN_EXP,
       secret: this.jwtConfig.ACCESS_TOKEN_SECRET,

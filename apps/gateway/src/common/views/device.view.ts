@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DeviceType } from '../../features/users/devices/repos/device.repo';
 import { UserAgentAdapter } from '../adapters/agent/agent.adapter';
+import { Device } from '../../modules/users/domain/device.entity';
 
-export class DeviceViewModel {
+export class DeviceView {
   @ApiProperty()
   id: string;
 
@@ -33,7 +33,13 @@ export class DeviceViewModel {
   @ApiProperty()
   ip: string;
 
-  constructor({ title, iat, ip, id }: DeviceType, current: boolean) {
+  static builder({
+    title,
+    iat,
+    ip,
+    id,
+    current,
+  }: Device & { current: boolean }): DeviceView {
     const {
       browserName,
       browserVersion,
@@ -43,15 +49,18 @@ export class DeviceViewModel {
       deviceType,
     } = UserAgentAdapter.parseUserAgent(title);
 
-    this.id = id;
-    this.browserName = browserName;
-    this.browserVersion = browserVersion;
-    this.osName = osName;
-    this.osVersion = osVersion;
-    this.deviceName = deviceName;
-    this.deviceType = deviceType;
-    this.lastActiveDate = new Date(iat * 1000).toISOString();
-    this.current = current;
-    this.ip = ip;
+    const instance = new this();
+    instance.id = id;
+    instance.browserName = browserName;
+    instance.browserVersion = browserVersion;
+    instance.osName = osName;
+    instance.osVersion = osVersion;
+    instance.deviceName = deviceName;
+    instance.deviceType = deviceType;
+    instance.lastActiveDate = new Date(iat * 1000).toISOString();
+    instance.current = current;
+    instance.ip = ip;
+
+    return instance;
   }
 }

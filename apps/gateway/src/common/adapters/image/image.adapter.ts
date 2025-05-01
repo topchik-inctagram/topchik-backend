@@ -2,180 +2,162 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import FormData from 'form-data';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { AsyncStorageAdapter } from '../local-storage/local-storage.adapter';
 import { ConfigService } from '@nestjs/config';
-import { Configuration } from '../../../core/config/configuration';
-import { StorageServiceSettings } from '../../../core/config/storage-service.settings';
-import { AvatarResponseView } from '../../../../../common/views/avatar-response.view';
-import { ImagesDto } from '../../../../../common/dtos/images.dto';
-import { PostResponseView } from '../../../../../common/views/post-response.view';
+import { Configuration } from '../../config/configuration';
+import { StorageServiceSettings } from '../../config/settings/storage-service.settings';
 import { AppLoggerService } from '../../../../../common/logger/logger.service';
+import { ImageRepo } from './image.repository';
+import { ImageMetaType } from '../../../../../common/types/image/image.dto';
+import { FileListDto } from '../../../../../storage/src/modules/images/application/dtos/file-list.dto';
+import { ImageResponseView } from '../../../../../common/views/image-response.view';
+import { Image } from '../../domain/image.entity';
+import { ImageListResponseView } from '../../../../../common/views/image-list-response.view';
 
 @Injectable()
 export class ImageService {
-  avatarUrl: string;
-  postUrl: string;
+  uploadImageUrl: string;
+  uploadImageListUrl: string;
 
   constructor(
     private readonly httpService: HttpService,
-    private asyncStorageService: AsyncStorageAdapter,
     private configService: ConfigService<Configuration, true>,
     private logger: AppLoggerService,
+    private imageRepo: ImageRepo,
   ) {
     const config = this.configService.get<StorageServiceSettings>(
       'storageServiceSettings',
     );
 
-    this.avatarUrl = config.STORAGE_AVATAR_URL;
-    this.postUrl = config.STORAGE_POSTS_URL;
+    this.uploadImageUrl = config.STORAGE_UPLOAD_IMAGE_URL;
+    this.uploadImageListUrl = config.STORAGE_UPLOAD_IMAGE_LIST_URL;
     this.logger.setContext('ImageService');
   }
-
-  async getPostImages(postId: number): Promise<PostResponseView | null> {
-    const response = await this.getImages(postId, this.postUrl);
-
-    if (!response.data) {
-      return null;
-    }
-
-    return response.data;
-  }
-
-  async sendPostImages(
-    postId: number,
-    images: ImagesDto[],
-  ): Promise<PostResponseView | null> {
-    const response = await this.sendImages(postId, images, this.postUrl);
-    if (
-      !response ||
-      (response.status !== HttpStatus.CREATED && !response.data)
-    ) {
-      return null;
-    }
-
-    return response.data;
-  }
-
-  async sendAvatar(
-    userId: number,
+  async uploadImage(
+    ownerId: number,
     imageBuffer: Buffer,
     filename: string,
     contentType: string,
-  ): Promise<AvatarResponseView | null> {
-    const response = await this.sendImage(
-      userId,
-      imageBuffer,
-      filename,
-      contentType,
-      this.avatarUrl,
-    );
-
-    if (
-      !response ||
-      (response.status !== HttpStatus.CREATED && !response.data)
-    ) {
-      return null;
-    }
-
-    return response.data;
-  }
-
-  async deleteAvatar(imageId: string): Promise<void> {
-    await this.deleteImage(imageId, this.avatarUrl);
-
-    return;
-  }
-
-  async getAvatar(imageId: string): Promise<AvatarResponseView | null> {
-    try {
-      const response = await this.getImage(imageId, this.avatarUrl);
-
-      if (!response.data) {
-        return null;
-      }
-
-      return response.data;
-    } catch (e) {
-      this.logger.error('Error to return Avatar', JSON.stringify(e));
-      return null;
-    }
-  }
-
-  private async sendImage(
-    userId: number,
-    imageBuffer: Buffer,
-    filename: string,
-    contentType: string,
-    url: string,
-  ): Promise<any> {
+    imgMeta: ImageMetaType,
+  ): Promise<number> {
     const formData = new FormData();
     formData.append('file', imageBuffer, { filename, contentType });
-    formData.append('userId', userId);
+    formData.append('ownerId', ownerId);
+    formData.append('imgMeta', JSON.stringify(imgMeta), {
+      contentType: 'application/json',
+    }); // Сериализуем объект
     try {
-      return firstValueFrom(
-        this.httpService.post(url, formData, {
-          headers: formData.getHeaders(),
-        }),
+      const response = await firstValueFrom(
+        this.httpService.post<ImageResponseView>(
+          this.uploadImageUrl,
+          formData,
+          {
+            headers: { ...formData.getHeaders(), Accept: 'application/json' },
+          },
+        ),
       );
+
+      if (
+        !response ||
+        (response.status !== HttpStatus.CREATED && !response.data)
+      ) {
+        throw new Error('Invalid response after uploadImage');
+      }
+
+      const image = Image.create({
+        key: response.data.id,
+        originUrl: response.data.originFilePath,
+        smallUrl: response.data.smallFilePath,
+        mediumUrl: response.data.mediumFilePath,
+        index: response.data.index,
+      });
+
+      const createdImage = await this.imageRepo.saveOne(image);
+
+      return createdImage.id;
     } catch (error) {
-      console.error(`Failed to upload image`, error);
-      return null;
+      this.logger.error(`Failed to upload image`, error);
+      //todo DomainError(503) 503 - Service Unavailable
+      throw new Error();
     }
   }
 
-  private async deleteImage(imageId: string, url: string): Promise<any> {
-    try {
-      return lastValueFrom(this.httpService.delete(`${url}/${imageId}`));
-    } catch (error) {
-      console.error(`Failed to delete image with ID ${imageId}`, error);
-      return null;
-    }
-  }
-
-  private async getImage(imageId: string, url: string): Promise<any> {
-    try {
-      return lastValueFrom(this.httpService.get(`${url}/${imageId}`));
-    } catch (error) {
-      console.error(`Failed to get image with ID ${imageId}`, error);
-      return null;
-    }
-  }
-
-  private async getImages(postId: number, url: string): Promise<any> {
-    try {
-      return lastValueFrom(this.httpService.get(`${url}/${postId}`));
-    } catch (error) {
-      console.error(`Failed to get image with ID ${postId}`, error);
-      return null;
-    }
-  }
-
-  private async sendImages(
+  async uploadImageList(
     ownerId: number,
-    images: Array<ImagesDto>,
-    url: string,
-  ): Promise<any> {
+    images: Array<FileListDto>,
+    imgMeta: ImageMetaType,
+  ): Promise<number[]> {
     const formData = new FormData();
-
+    formData.append('ownerId', ownerId);
+    formData.append('imgMeta', JSON.stringify(imgMeta), {
+      contentType: 'application/json',
+    });
     // Добавляем каждое изображение в formData с уникальными именами полей
     images.forEach((image) => {
       formData.append(`files`, image.buffer, {
-        filename: image.imageName,
+        filename: image.originalName,
         contentType: image.mimetype,
       });
     });
 
-    formData.append('ownerId', ownerId.toString());
-
     try {
-      return firstValueFrom(
-        this.httpService.post(url, formData, {
-          headers: formData.getHeaders(),
+      const response = await firstValueFrom(
+        this.httpService.post<ImageListResponseView>(
+          this.uploadImageListUrl,
+          formData,
+          {
+            headers: formData.getHeaders(),
+          },
+        ),
+      );
+
+      if (
+        !response ||
+        (response.status !== HttpStatus.CREATED && !response.data)
+      ) {
+        throw new Error('Invalid response after uploadImages');
+      }
+
+      const images = response.data.images.map((item) =>
+        Image.create({
+          key: item.id,
+          originUrl: item.originFilePath,
+          smallUrl: item.smallFilePath,
+          mediumUrl: item.mediumFilePath,
+          index: item.index,
         }),
       );
+
+      const createdImages = await this.imageRepo.saveMany(images);
+
+      return createdImages.map((createdImage) => createdImage.id);
     } catch (error) {
-      console.error(`Failed to upload images`, error);
+      this.logger.error(`Failed to upload images`, error);
+      //todo DomainError(503) 503 - Service Unavailable
       return null;
     }
   }
+
+  async getImageByKey(key: string) {
+    try {
+      return lastValueFrom(
+        this.httpService.get(`${this.uploadImageUrl}/${key}`),
+      );
+    } catch (error) {
+      this.logger.error(`Failed to get image with key ${key}`, error);
+      //todo DomainError(503) 503 - Service Unavailable
+      return null;
+    }
+  }
+
+  //todo
+  // async getImageListByKeys(keys: string[]) {
+  //   try {
+  //     return lastValueFrom(
+  //       this.httpService.get(`${this.uploadImageUrl}/${}`),
+  //     );
+  //   } catch (error) {
+  //     this.logger.error(`Failed to get image with ID ${postId}`, error);
+  //     return null;
+  //   }
+  // }
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { City, Country } from '../../../prisma/client';
+import { City } from '../../modules/reference/country-cities/domain/city.entity';
 
 export class CityView {
   @ApiProperty()
@@ -21,7 +21,7 @@ export class CityView {
     this.name_ru = name_ru;
   }
 
-  static builder(city: City & { country?: Country }) {
+  static builder(city: City) {
     return new this(city);
   }
 }

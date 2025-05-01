@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Country } from '../../../prisma/client';
+import { Country } from '../../modules/reference/country-cities/domain/country.entity';
 
 export class CountryView {
   @ApiProperty()

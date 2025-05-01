@@ -1,9 +1,8 @@
-import { City, Country, Profile } from '../../../prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { ImageResponseView } from '../../../../common/views/image-response.view';
-import { AvatarResponseView } from '../../../../common/views/avatar-response.view';
 import { CityView } from './city.view';
 import { CountryView } from './country.view';
+import { Profile } from '../../modules/users/domain/profile.entity';
+import { ImageView } from './image.view';
 
 export class ProfileView {
   @ApiProperty()
@@ -13,7 +12,7 @@ export class ProfileView {
   lastName: string;
 
   @ApiProperty()
-  dateOfBirth: Date | null;
+  dateOfBirth: string | null;
 
   @ApiProperty({ type: CountryView, nullable: true })
   country: CountryView | null;
@@ -24,13 +23,10 @@ export class ProfileView {
   @ApiProperty()
   aboutMe: string | null;
 
-  @ApiProperty({ type: ImageResponseView, nullable: true })
-  avatarInfo: ImageResponseView | null;
+  @ApiProperty({ type: ImageView, nullable: true })
+  avatarInfo: ImageView | null;
 
-  static builder(
-    profile: Profile & { city?: City; country?: Country },
-    avatarInfo?: AvatarResponseView,
-  ): ProfileView {
+  static builder(profile: Profile): ProfileView {
     const instance = new this();
 
     instance.firstName = profile.firstName;
@@ -41,9 +37,11 @@ export class ProfileView {
     instance.aboutMe = profile.aboutMe;
     instance.avatarInfo = null;
 
-    if (avatarInfo) {
-      instance.avatarInfo = new ImageResponseView();
-      instance.avatarInfo.create(avatarInfo);
+    if (profile.avatar) {
+      instance.avatarInfo = ImageView.builder(
+        profile.avatar.id,
+        profile.avatar.image,
+      );
     }
 
     if (profile.country) {
@@ -55,17 +53,5 @@ export class ProfileView {
     }
 
     return instance;
-  }
-
-  private convertDateOfBirth(birth: Date) {
-    const correctedDate = new Date(
-      birth.getTime() - birth.getTimezoneOffset() * 60000,
-    );
-
-    const day = String(correctedDate.getDate()).padStart(2, '0');
-    const month = String(correctedDate.getMonth() + 1).padStart(2, '0');
-    const year = correctedDate.getFullYear();
-
-    return `${day}/${month}/${year}`;
   }
 }

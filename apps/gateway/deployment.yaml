@@ -107,16 +107,16 @@ spec:
                  secretKeyRef:
                    name: topchik-backend-production-config-secret
                    key: PROD_DOMAIN
-             - name: STORAGE_AVATAR_URL
+             - name: STORAGE_UPLOAD_IMAGE_URL
                valueFrom:
                  secretKeyRef:
                    name: topchik-backend-production-config-secret
-                   key: STORAGE_AVATAR_URL
-             - name: STORAGE_POSTS_URL
+                   key: STORAGE_UPLOAD_IMAGE_URL
+             - name: STORAGE_UPLOAD_IMAGE_LIST_URL
                valueFrom:
                  secretKeyRef:
                    name: topchik-backend-production-config-secret
-                   key: STORAGE_POSTS_URL
+                   key: STORAGE_UPLOAD_IMAGE_LIST_URL
              - name: PROFILE_REDIRECT
                valueFrom:
                  secretKeyRef:

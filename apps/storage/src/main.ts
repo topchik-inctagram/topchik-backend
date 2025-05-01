@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { UploadsModule } from './uploads.module';
 import { ConfigService } from '@nestjs/config';
-import { configApp } from './core/config/app.config';
-import { StorageConfiguration } from './core/config/storage-configuration';
+import { configApp } from './common/config/app.config';
+import { StorageConfiguration } from './common/config/storage-configuration';
 import { getAppConnectSettings } from '../../common/config/get-app-connect-settings';
 import { AppLoggerService } from '../../common/logger/logger.service';
 

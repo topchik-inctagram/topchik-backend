@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ImageResponseView } from '../../../../common/views/image-response.view';
-import { Post, PostImage } from '../../../prisma/client';
+import { Post } from '../../modules/content/posts/domain/post.entity';
+import { ImageView } from './image.view';
 
 export class PostView {
   @ApiProperty()
@@ -9,8 +9,8 @@ export class PostView {
   @ApiProperty({ nullable: true })
   description: string | null;
 
-  @ApiProperty({ isArray: true, type: ImageResponseView })
-  images: ImageResponseView[];
+  @ApiProperty({ isArray: true, type: ImageView })
+  images: ImageView[];
 
   @ApiProperty({ description: 'Дата в виде toISOString' })
   createdAt: string;
@@ -18,18 +18,16 @@ export class PostView {
   @ApiProperty({ nullable: true, description: 'Дата в виде toISOString' })
   updatedAt: string | null;
 
-  //todo fix this part
-  static builder(
-    post: Post & { images?: PostImage[] },
-    images: ImageResponseView[],
-  ): PostView {
-    const result = new this();
-    result.id = post.id;
-    result.description = post.description;
-    result.images = images;
-    result.createdAt = post.createdAt.toISOString();
-    result.updatedAt = post.updatedAt ? post.updatedAt.toISOString() : null;
+  static builder(post: Post): PostView {
+    const instance = new this();
+    instance.id = post.id;
+    instance.description = post.description;
+    instance.images = post.images.map((postImg) =>
+      ImageView.builder(postImg.id, postImg.image),
+    );
+    instance.createdAt = post.createdAt.toISOString();
+    instance.updatedAt = post.updatedAt ? post.updatedAt.toISOString() : null;
 
-    return result;
+    return instance;
   }
 }

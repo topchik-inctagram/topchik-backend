@@ -2,8 +2,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { emailExamples } from './email.examples';
 import { ConfigService } from '@nestjs/config';
-import { Configuration } from '../../../core/config/configuration';
-import { FrontRedirectSettings } from '../../../core/config/front-redirect.settings';
+import { Configuration } from '../../config/configuration';
+import { FrontRedirectSettings } from '../../config/settings/front-redirect.settings';
 import { AsyncStorageAdapter } from '../local-storage/local-storage.adapter';
 
 @Injectable()

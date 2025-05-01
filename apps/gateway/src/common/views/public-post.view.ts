@@ -1,32 +1,26 @@
 import { UserInfoView } from './user-info.view';
 import { ApiProperty } from '@nestjs/swagger';
-import { Post, PostImage, Profile, User } from '../../../prisma/client';
 import { PostView } from './post.view';
-import { AvatarResponseView } from '../../../../common/views/avatar-response.view';
-import { ImageResponseView } from '../../../../common/views/image-response.view';
+import { Post } from '../../modules/content/posts/domain/post.entity';
+import { ImageView } from './image.view';
 
 export class PublicPostView extends PostView {
   @ApiProperty({ type: UserInfoView })
   userInfo: UserInfoView;
 
-  static build(
-    post: Post & { images?: PostImage[] },
-    images: ImageResponseView[],
-    user?: User & {
-      profile?: Profile;
-    },
-    avatarInfo?: AvatarResponseView,
-  ) {
-    const result = this.builder(post, images);
-
+  static builder(post: Post) {
     const instance = new this();
 
-    instance.id = result.id;
-    instance.description = result.description;
-    instance.images = result.images;
+    instance.id = post.id;
+    instance.description = post.description;
+    instance.images = post.images.map((postImg) =>
+      ImageView.builder(postImg.id, postImg.image),
+    );
+    instance.createdAt = post.createdAt.toISOString();
+    instance.updatedAt = post.updatedAt ? post.updatedAt.toISOString() : null;
 
-    if (user) {
-      instance.userInfo = UserInfoView.build(user, avatarInfo);
+    if (post.user) {
+      instance.userInfo = UserInfoView.builder(post.user);
     }
 
     return instance;

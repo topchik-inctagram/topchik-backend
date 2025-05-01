@@ -1,6 +1,8 @@
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCookieAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -20,7 +22,7 @@ import {
   OK,
   TOO_MANY_REQUESTS,
   UNAUTHORIZED,
-} from '../../../core/swagger/swagger.constants';
+} from '../swagger.constants';
 import { BadRequestResponse } from '../../../../../common/views/response.view';
 
 export abstract class ApiResponseAdapter {
@@ -41,10 +43,12 @@ export abstract class ApiResponseAdapter {
   static getOkResponse<T extends Function>(
     description: string | null,
     type?: T,
+    isArray?: boolean,
   ) {
     return ApiOkResponse({
       description: description ?? OK,
       type,
+      isArray: isArray ? true : false,
     });
   }
 
@@ -93,5 +97,43 @@ export abstract class ApiResponseAdapter {
     return ApiTooManyRequestsResponse({
       description: description ?? TOO_MANY_REQUESTS,
     });
+  }
+
+  static getImageBodyResponse(description: string | null) {
+    return [
+      ApiConsumes('multipart/form-data'),
+      ApiBody({
+        description,
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            file: {
+              type: 'string',
+              format: 'binary',
+            },
+          },
+        },
+      }),
+    ];
+  }
+
+  static getImageListBodyResponse(description: string | null) {
+    return [
+      ApiConsumes('multipart/form-data'),
+      ApiBody({
+        description,
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            files: {
+              type: 'array',
+              format: 'binary',
+            },
+          },
+        },
+      }),
+    ];
   }
 }

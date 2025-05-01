@@ -1,7 +1,6 @@
-import { Profile, User } from '../../../prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { AvatarResponseView } from '../../../../common/views/avatar-response.view';
-import { ImageResponseView } from '../../../../common/views/image-response.view';
+import { User } from '../../modules/users/domain/user.entity';
+import { ImageView } from './image.view';
 
 export class UserInfoView {
   @ApiProperty()
@@ -13,24 +12,21 @@ export class UserInfoView {
   @ApiProperty()
   lastName: string;
 
-  @ApiProperty({ type: ImageResponseView, nullable: true })
-  avatarInfo: ImageResponseView | null;
+  @ApiProperty({ type: ImageView, nullable: true })
+  avatarInfo: ImageView | null;
 
-  static build(
-    user: User & {
-      profile?: Profile;
-    },
-    avatarInfo?: AvatarResponseView,
-  ) {
+  static builder(user: User) {
     const instance = new this();
 
     instance.id = user.id.toString();
     instance.firstName = user.profile.firstName;
     instance.lastName = user.profile.lastName;
 
-    if (avatarInfo) {
-      instance.avatarInfo = new ImageResponseView();
-      instance.avatarInfo.create(avatarInfo);
+    if (user.profile.avatar) {
+      instance.avatarInfo = ImageView.builder(
+        user.profile.avatar.id,
+        user.profile.avatar.image,
+      );
     }
     return instance;
   }
