@@ -4,6 +4,7 @@ import { PostsWithCursorView } from '../../../../common/views/posts-with-cursor.
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, LessThan, Repository } from 'typeorm';
 import { Post } from '../domain/post.entity';
+import { RepositoryNotFoundError } from '../../../../common/errors/repository-not-found.error';
 
 export const USER_POST_LIMIT = 8;
 export const POST_LIMIT = 4;
@@ -15,7 +16,7 @@ export class PostQueryRepo {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async findById(postId: number) {
+  async findByIdOrFail(postId: number) {
     const result = await this.postRepository.findOne({
       relations: {
         images: {
@@ -36,7 +37,11 @@ export class PostQueryRepo {
       },
     });
 
-    return result ? PostView.builder(result) : null;
+    if (!result) {
+      throw new RepositoryNotFoundError(`Post with id ${postId} not found`);
+    }
+
+    return PostView.builder(result);
   }
 
   async findPostList(cursor: number | null): Promise<PostsWithCursorView> {

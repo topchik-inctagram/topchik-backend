@@ -1,12 +1,9 @@
 import { DevicesRepo } from '../../repos/device.repo';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { DeviceMessages } from '../../../../../common/constants/message.constants';
 import { Result } from '../../../../../core/results/result';
-import {
-  ForbiddenError,
-  NotFoundError,
-} from '../../../../../../../common/exeptions/custom.exeption';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DeviceDomainMessages } from '../device-domain.message';
 
 export class DeleteDeviceCommand {
   constructor(
@@ -22,11 +19,15 @@ export class DeleteDeviceUseCase
   constructor(private readonly devicesRepository: DevicesRepo) {}
 
   async execute({ userId, deviceId }: DeleteDeviceCommand): Promise<Result> {
-    const device = await this.devicesRepository.findById(deviceId);
-    if (!device) return Result.Err(new NotFoundError(DeviceMessages.NOT_EXIST));
+    const device = await this.devicesRepository.findByIdOrFail(deviceId);
 
-    if (device.userId !== userId)
-      return Result.Err(new ForbiddenError(DeviceMessages.FORBIDDEN));
+    if (device.userId !== userId) {
+      throw new DomainError({
+        tag: ErrorTag.PERMISSION_DENIED,
+        message: DeviceDomainMessages.PERMISSION_DENIED,
+      });
+    }
+
     await this.devicesRepository.deleteById(deviceId);
     return Result.Ok();
   }

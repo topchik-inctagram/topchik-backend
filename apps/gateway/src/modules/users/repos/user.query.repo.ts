@@ -5,6 +5,7 @@ import { User } from '../domain/user.entity';
 import { IsNull, Repository } from 'typeorm';
 import { Avatar } from '../domain/avatar.entity';
 import { ImageView } from '../../../common/views/image.view';
+import { RepositoryNotFoundError } from '../../../common/errors/repository-not-found.error';
 
 @Injectable()
 export class UserQueryRepo {
@@ -15,7 +16,7 @@ export class UserQueryRepo {
     private readonly avatarRepository: Repository<Avatar>,
   ) {}
 
-  async findById(id: number) {
+  async findByIdOrFail(id: number) {
     const user = await this.userRepository.findOne({
       relations: {
         profile: {
@@ -35,7 +36,9 @@ export class UserQueryRepo {
         },
       },
     });
-    if (!user) return null;
+    if (!user) {
+      throw new RepositoryNotFoundError(`User with id ${id} not found`);
+    }
 
     return user;
   }

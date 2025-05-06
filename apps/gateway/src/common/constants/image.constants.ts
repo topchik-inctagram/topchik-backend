@@ -22,3 +22,10 @@ export const imageConstants = {
     },
   },
 };
+
+export enum UploadImageErrorMessages {
+  ERROR_UPLOAD_IMG_LIST = 'Images loading error',
+  ERROR_UPLOAD_IMG = 'Image loading error',
+  ERROR_GET_IMAGE_LIST = 'Images getting error',
+  ERROR_GET_IMAGE = 'Image getting error',
+}

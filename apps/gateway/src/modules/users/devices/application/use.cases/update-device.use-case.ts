@@ -32,11 +32,8 @@ export class UpdateDeviceUseCase
     title,
     ip,
   }: UpdateDeviceCommand): Promise<Result<TokensType>> {
-    const device = await this.devicesRepository.findById(deviceId);
+    const device = await this.devicesRepository.findByIdOrFail(deviceId);
 
-    if (!device) {
-      throw new Error();
-    }
     // create refresh token
     const refreshToken = await this.jwtAdapter.createRefreshToken({
       userId,

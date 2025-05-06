@@ -8,6 +8,7 @@ import { Recovery, RecoveryStatus } from '../domain/recovery.entity';
 import { Provider } from '../domain/provider.entity';
 import { Profile } from '../domain/profile.entity';
 import { Avatar } from '../domain/avatar.entity';
+import { RepositoryNotFoundError } from '../../../common/errors/repository-not-found.error';
 
 type EmailOrNickType = { email: string; nickname: string };
 
@@ -36,19 +37,26 @@ export class UserRepo {
     return this.confirmationRepository.save(confirmation);
   }
 
-  async saveRecovery(recovery: Recovery) {
+  async saveRecovery(recovery: Recovery): Promise<Recovery> {
     return this.recoveryRepository.save(recovery);
   }
 
-  async saveProfile(profile: Profile) {
+  async saveProfile(profile: Profile): Promise<Profile> {
     return this.profileRepository.save(profile);
   }
 
-  async saveProvider(provider: Provider) {
+  async saveProvider(provider: Provider): Promise<Provider> {
     return this.providerRepository.save(provider);
   }
 
-  async findByEmailOrNick({ email, nickname }: EmailOrNickType) {
+  async saveAvatar(avatar: Avatar): Promise<Avatar> {
+    return this.avatarRepository.save(avatar);
+  }
+
+  async findByEmailOrNick({
+    email,
+    nickname,
+  }: EmailOrNickType): Promise<User | null> {
     return this.userRepository.findOne({
       relations: {
         confirmation: true,
@@ -58,8 +66,8 @@ export class UserRepo {
     });
   }
 
-  async findByCodeConfirmation(confirmationCode: string) {
-    return this.userRepository.findOne({
+  async findByCodeConfirmationOrFail(confirmationCode: string): Promise<User> {
+    const result = await this.userRepository.findOne({
       where: {
         confirmation: {
           code: confirmationCode,
@@ -69,10 +77,17 @@ export class UserRepo {
         confirmation: true,
       },
     });
+    if (!result) {
+      throw new RepositoryNotFoundError(
+        `User by confirmation code ${confirmationCode} not found`,
+      );
+    }
+
+    return result;
   }
 
-  async findByCodeRecovery(recoveryCode: string) {
-    return this.userRepository.findOne({
+  async findByCodeRecoveryOrFail(recoveryCode: string): Promise<User> {
+    const result = await this.userRepository.findOne({
       where: {
         recovery: {
           code: recoveryCode,
@@ -83,9 +98,17 @@ export class UserRepo {
         recovery: true,
       },
     });
+
+    if (!result) {
+      throw new RepositoryNotFoundError(
+        `User by recovery code ${recoveryCode} not found`,
+      );
+    }
+
+    return result;
   }
 
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({
       relations: {
         confirmation: true,
@@ -98,7 +121,26 @@ export class UserRepo {
     });
   }
 
-  async findByNickname(nickname: string) {
+  async findByEmailOrFail(email: string): Promise<User> {
+    const result = await this.userRepository.findOne({
+      relations: {
+        confirmation: true,
+        providers: true,
+        recovery: true,
+      },
+      where: {
+        email,
+      },
+    });
+
+    if (!result) {
+      throw new RepositoryNotFoundError(`User by email ${email} not found`);
+    }
+
+    return result;
+  }
+
+  async findByNickname(nickname: string): Promise<User | null> {
     return this.userRepository.findOne({
       where: {
         nickname,
@@ -106,8 +148,8 @@ export class UserRepo {
     });
   }
 
-  async findById(id: number) {
-    return this.userRepository.findOne({
+  async findByIdOrFail(id: number): Promise<User> {
+    const result = await this.userRepository.findOne({
       relations: {
         profile: {
           avatar: {
@@ -119,9 +161,18 @@ export class UserRepo {
         id,
       },
     });
+
+    if (!result) {
+      throw new RepositoryNotFoundError(`User with id ${id} not found`);
+    }
+
+    return result;
   }
 
-  async findByProviderId(providerId: string, type: ProviderType) {
+  async findByProviderId(
+    providerId: string,
+    type: ProviderType,
+  ): Promise<User | null> {
     return this.userRepository.findOne({
       where: {
         providers: {
@@ -135,11 +186,9 @@ export class UserRepo {
     });
   }
 
-  async saveAvatar(avatar: Avatar) {
-    return this.avatarRepository.save(avatar);
-  }
+  async deleteAvatar(id: number): Promise<void> {
+    await this.avatarRepository.delete(id);
 
-  async deleteAvatar(id: number) {
-    return this.avatarRepository.delete(id);
+    return;
   }
 }

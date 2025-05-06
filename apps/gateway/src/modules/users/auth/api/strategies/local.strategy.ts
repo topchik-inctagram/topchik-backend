@@ -6,8 +6,7 @@ import { CheckCredentialsCommand } from '../../application/use.cases/check-crede
 import { Result } from '../../../../../core/results/result';
 import { LoginInputDto } from '../dtos/login.dto';
 import { validate } from 'class-validator';
-import { UserMessages } from '../../../../../common/constants/message.constants';
-import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
+import { UnauthorizedError } from '../../../../../common/errors/unauthorized.error';
 
 const validateLoginOrEmail = async (email: string, password: string) => {
   const loginDto = new LoginInputDto();
@@ -34,15 +33,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string): Promise<any> {
     await validateLoginOrEmail(email, password);
+    try {
+      const result = await this.commandBus.execute<
+        CheckCredentialsCommand,
+        Result<{ userId: number }>
+      >(new CheckCredentialsCommand(email, password));
 
-    const result = await this.commandBus.execute<
-      CheckCredentialsCommand,
-      Result<{ userId: number }>
-    >(new CheckCredentialsCommand(email, password));
-
-    if (!result.isSuccess) {
-      throw new UnauthorizedError(UserMessages.INCORRECT_EMAIL_OR_PASS);
+      return result.value;
+    } catch (err) {
+      throw new UnauthorizedError('User credentials did not match');
     }
-    return result.value;
   }
 }

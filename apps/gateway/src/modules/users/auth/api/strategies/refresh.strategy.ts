@@ -42,7 +42,9 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   ): Promise<RefreshPayloadType> {
     if (!payload) throw new UnauthorizedError('Wrong credentials');
 
-    const device = await this.devicesRepository.findById(payload.deviceId);
+    const device = await this.devicesRepository.findByIdOrFail(
+      payload.deviceId,
+    );
 
     if (!device) throw new UnauthorizedError('Wrong credentials');
 

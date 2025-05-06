@@ -29,7 +29,7 @@ export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   ): Promise<AccessPayloadType> {
     if (!payload) throw new UnauthorizedError('Wrong credentials');
 
-    const user = await this.usersRepository.findById(payload.userId);
+    const user = await this.usersRepository.findByIdOrFail(payload.userId);
 
     if (!user) throw new UnauthorizedError('Wrong credentials');
 

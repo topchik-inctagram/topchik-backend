@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UserRepo } from '../../../repos/user.repo';
 import { Result } from '../../../../../core/results/result';
-
-import { UserMessages } from '../../../../../common/constants/message.constants';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class ConfirmEmailCommand {
   constructor(public code: string) {}
@@ -16,24 +16,26 @@ export class ConfirmEmailUseCase
   constructor(private readonly userRepo: UserRepo) {}
 
   async execute({ code }: ConfirmEmailCommand): Promise<Result<boolean>> {
-    const user = await this.userRepo.findByCodeConfirmation(code);
-
-    if (!user) {
-      return Result.Err(new BadRequestError(UserMessages.NOT_EXIST, 'code'));
-    }
+    const user = await this.userRepo.findByCodeConfirmationOrFail(code);
 
     if (user.confirmation && user.confirmation.exp < new Date()) {
-      return Result.Err(new BadRequestError(UserMessages.EXPIRED_CODE, 'code'));
+      throw new DomainError({
+        tag: ErrorTag.VALIDATION_FAILED,
+        message: UserDomainMessages.EXPIRED_CODE,
+        metadata: {
+          code: UserDomainMessages.EXPIRED_CODE,
+        },
+      });
     }
 
     if (user && user.confirmation.status === 'CONFIRM') {
-      return Result.Ok(true);
+      return Result.Ok();
     }
 
     user.confirmation.confirm();
 
     await this.userRepo.save(user);
 
-    return Result.Ok(true);
+    return Result.Ok();
   }
 }

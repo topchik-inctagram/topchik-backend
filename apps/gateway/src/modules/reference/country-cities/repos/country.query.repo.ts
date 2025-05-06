@@ -18,9 +18,7 @@ export class CountryQueryRepo {
   async getCounties(): Promise<CountryView[]> {
     const countries = await this.countryRepository.find();
 
-    return countries.length
-      ? countries.map((country) => new CountryView(country))
-      : [];
+    return countries.map((country) => new CountryView(country));
   }
 
   async getCountryCities(countryId: number): Promise<CityView[]> {
@@ -29,6 +27,6 @@ export class CountryQueryRepo {
         countryId,
       },
     });
-    return cities.length ? cities.map((city) => new CityView(city)) : [];
+    return cities.map((city) => new CityView(city));
   }
 }

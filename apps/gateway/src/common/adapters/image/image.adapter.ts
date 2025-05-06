@@ -12,6 +12,8 @@ import { FileListDto } from '../../../../../storage/src/modules/images/applicati
 import { ImageResponseView } from '../../../../../common/views/image-response.view';
 import { Image } from '../../domain/image.entity';
 import { ImageListResponseView } from '../../../../../common/views/image-list-response.view';
+import { AdaptorError } from '../../errors/adaptor.error';
+import { UploadImageErrorMessages } from '../../constants/image.constants';
 
 @Injectable()
 export class ImageService {
@@ -76,8 +78,7 @@ export class ImageService {
       return createdImage.id;
     } catch (error) {
       this.logger.error(`Failed to upload image`, error);
-      //todo DomainError(503) 503 - Service Unavailable
-      throw new Error();
+      throw new AdaptorError(UploadImageErrorMessages.ERROR_UPLOAD_IMG);
     }
   }
 
@@ -132,8 +133,7 @@ export class ImageService {
       return createdImages.map((createdImage) => createdImage.id);
     } catch (error) {
       this.logger.error(`Failed to upload images`, error);
-      //todo DomainError(503) 503 - Service Unavailable
-      return null;
+      throw new AdaptorError(UploadImageErrorMessages.ERROR_UPLOAD_IMG_LIST);
     }
   }
 
@@ -144,8 +144,7 @@ export class ImageService {
       );
     } catch (error) {
       this.logger.error(`Failed to get image with key ${key}`, error);
-      //todo DomainError(503) 503 - Service Unavailable
-      return null;
+      throw new AdaptorError(UploadImageErrorMessages.ERROR_GET_IMAGE);
     }
   }
 

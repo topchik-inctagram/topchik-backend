@@ -147,7 +147,7 @@ export class PostController {
     );
 
     if (!result.isSuccess) throw result.err;
-    return this.postQueryRepo.findById(result.value);
+    return this.postQueryRepo.findByIdOrFail(result.value);
   }
 
   @Put(':id')

@@ -3,8 +3,6 @@ import { FileListDto } from '../../../../../../../storage/src/modules/images/app
 import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 import { PostRepo } from '../../repos/post.repo';
 import { Result } from '../../../../../core/results/result';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
-import { PostsMessages } from '../../../../../common/constants/message.constants';
 import { Post } from '../../domain/post.entity';
 import { ImageMetaType } from '../../../../../../../common/types/image/image.dto';
 import { ImageType } from '../../../../../../../common/types/image/image-owner-type';
@@ -49,12 +47,6 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
       images,
       this.imgMeta,
     );
-
-    if (!uploadingImageIds.length) {
-      return Result.Err(
-        new BadRequestError(PostsMessages.ERROR_UPLOAD, 'files'),
-      );
-    }
 
     const postImages = uploadingImageIds.map((imageId) =>
       PostImage.create({ imageId, postId: post.id }),

@@ -2,14 +2,12 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserRepo } from '../../../repos/user.repo';
 import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { CreateUserEvent } from '../../events/create-user.event';
-import { UserMessages } from '../../../../../common/constants/message.constants';
 import { Result } from '../../../../../core/results/result';
-import {
-  BadRequestError,
-  BadRequestErrors,
-} from '../../../../../../../common/exeptions/custom.exeption';
 import { User } from '../../../domain/user.entity';
 import { RegistrationInputDto } from '../../api/dtos/registration.dto';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class RegistrationCommand {
   constructor(public userDto: RegistrationInputDto) {}
@@ -87,47 +85,44 @@ export class RegistrationUseCase
         this.createUserEvent(nickname, user.confirmation.code, email);
         return Result.Ok();
       } else {
-        return Result.Err(
-          new BadRequestErrors([
-            {
-              field: 'username',
-              message: UserMessages.ALREADY_REGISTERED_BY_USERNAME,
-            },
-            {
-              field: 'email',
-              message: UserMessages.ALREADY_REGISTERED_BY_EMAIL,
-            },
-          ]),
-        );
+        throw new DomainError({
+          tag: ErrorTag.VALIDATION_FAILED,
+          message: UserDomainMessages.ALREADY_REGISTERED,
+          metadata: {
+            username: UserDomainMessages.ALREADY_REGISTERED_BY_USERNAME,
+            email: UserDomainMessages.ALREADY_REGISTERED_BY_EMAIL,
+          },
+        });
       }
     }
 
     if (user.nickname === nickname) {
-      return Result.Err(
-        new BadRequestError(
-          UserMessages.ALREADY_REGISTERED_BY_USERNAME,
-          'username',
-        ),
-      );
+      throw new DomainError({
+        tag: ErrorTag.VALIDATION_FAILED,
+        message: UserDomainMessages.ALREADY_REGISTERED,
+        metadata: {
+          username: UserDomainMessages.ALREADY_REGISTERED_BY_USERNAME,
+        },
+      });
     }
     if (user.email === email) {
-      return Result.Err(
-        new BadRequestError(UserMessages.ALREADY_REGISTERED_BY_EMAIL, 'email'),
-      );
+      throw new DomainError({
+        tag: ErrorTag.VALIDATION_FAILED,
+        message: UserDomainMessages.ALREADY_REGISTERED,
+        metadata: {
+          email: UserDomainMessages.ALREADY_REGISTERED_BY_EMAIL,
+        },
+      });
     }
 
-    return Result.Err(
-      new BadRequestErrors([
-        {
-          field: 'username',
-          message: UserMessages.ALREADY_REGISTERED_BY_USERNAME,
-        },
-        {
-          field: 'email',
-          message: UserMessages.ALREADY_REGISTERED_BY_EMAIL,
-        },
-      ]),
-    );
+    throw new DomainError({
+      tag: ErrorTag.VALIDATION_FAILED,
+      message: UserDomainMessages.ALREADY_REGISTERED,
+      metadata: {
+        username: UserDomainMessages.ALREADY_REGISTERED_BY_USERNAME,
+        email: UserDomainMessages.ALREADY_REGISTERED_BY_EMAIL,
+      },
+    });
   }
 
   private createUserEvent(nickname: string, code: string, email: string) {

@@ -1,14 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PostRepo } from '../../repos/post.repo';
 import { Result } from '../../../../../core/results/result';
-import {
-  ForbiddenError,
-  NotFoundError,
-} from '../../../../../../../common/exeptions/custom.exeption';
-import {
-  FORBIDDEN,
-  PostsMessages,
-} from '../../../../../common/constants/message.constants';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { PostsDomainMessages } from '../post-domain.message';
 
 export class UpdatePostCommand {
   constructor(
@@ -23,15 +18,16 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
   constructor(private postRepo: PostRepo) {}
 
   async execute({ userId, postId, description }: UpdatePostCommand) {
-    const post = await this.postRepo.findById(postId);
-
-    if (!post) return Result.Err(new NotFoundError(PostsMessages.NOT_EXIST));
+    const post = await this.postRepo.findByIdOrFail(postId);
 
     if (post.userId !== userId) {
-      return Result.Err(new ForbiddenError(FORBIDDEN));
+      throw new DomainError({
+        tag: ErrorTag.PERMISSION_DENIED,
+        message: PostsDomainMessages.PERMISSION_DENIED,
+      });
     }
-    post.update({ description });
 
+    post.update({ description });
     await this.postRepo.save(post);
 
     return Result.Ok();

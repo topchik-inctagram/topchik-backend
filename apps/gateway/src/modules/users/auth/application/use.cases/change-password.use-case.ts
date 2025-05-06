@@ -4,9 +4,10 @@ import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { Result } from '../../../../../core/results/result';
 import { DevicesRepo } from '../../../devices/repos/device.repo';
 import { BaseCheckRecoveryUseCase } from './base-check-recovery.use-case';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
-import { UserMessages } from '../../../../../common/constants/message.constants';
 import { User } from '../../../domain/user.entity';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class ChangePasswordCommand {
   constructor(
@@ -34,10 +35,6 @@ export class ChangePasswordUseCase
   }: ChangePasswordCommand): Promise<Result<User>> {
     const result = await this.checkRecovery(recoveryCode);
 
-    if (!result.isSuccess) {
-      return result;
-    }
-
     const user = result.value;
 
     //check user new password
@@ -47,9 +44,13 @@ export class ChangePasswordUseCase
     );
 
     if (isMatched)
-      return Result.Err(
-        new BadRequestError(UserMessages.NOT_NEW_PASS, 'password'),
-      );
+      throw new DomainError({
+        tag: ErrorTag.VALIDATION_FAILED,
+        message: UserDomainMessages.NOT_NEW_PASS,
+        metadata: {
+          password: UserDomainMessages.NOT_NEW_PASS,
+        },
+      });
 
     //generate new password hash
     const passwordHash =

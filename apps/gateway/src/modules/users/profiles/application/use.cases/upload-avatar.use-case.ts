@@ -2,11 +2,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UserRepo } from '../../../repos/user.repo';
 import { ImageService } from '../../../../../common/adapters/image/image.adapter';
 import { Result } from '../../../../../core/results/result';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
-import {
-  AvatarMessages,
-  UserMessages,
-} from '../../../../../common/constants/message.constants';
 import { ImageMetaType } from '../../../../../../../common/types/image/image.dto';
 import { ImageType } from '../../../../../../../common/types/image/image-owner-type';
 import { imageConstants } from '../../../../../common/constants/image.constants';
@@ -47,10 +42,7 @@ export class UploadAvatarUseCase
     imageName,
     mimetype,
   }: UploadAvatarCommand): Promise<Result<number>> {
-    const user = await this.userRepo.findById(userId);
-    if (!user) {
-      return Result.Err(new BadRequestError(UserMessages.NOT_EXIST, 'id'));
-    }
+    const user = await this.userRepo.findByIdOrFail(userId);
 
     const imageId = await this.imageAdapter.uploadImage(
       user.id,
@@ -59,12 +51,6 @@ export class UploadAvatarUseCase
       mimetype,
       this.imgMeta,
     );
-
-    if (!imageId) {
-      return Result.Err(
-        new BadRequestError(AvatarMessages.ERROR_UPLOAD, 'file'),
-      );
-    }
 
     if (user.profile.avatar) {
       user.profile.updateAvatar(imageId);

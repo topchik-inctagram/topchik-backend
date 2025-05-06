@@ -2,12 +2,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ProfileInputDto } from '../../api/dtos/profile-input.dto';
 import { UserRepo } from '../../../repos/user.repo';
 import { Result } from '../../../../../core/results/result';
-import {
-  NOT_EXIST,
-  UserMessages,
-} from '../../../../../common/constants/message.constants';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
 import { CountryRepo } from '../../../../reference/country-cities/repos/country-repo';
+import { DomainError } from '../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class UpdateProfileCommand {
   constructor(
@@ -37,38 +35,30 @@ export class UpdateProfileUseCase
       aboutMe,
     },
   }: UpdateProfileCommand) {
-    const user = await this.userRepo.findById(userId);
-    if (!user) {
-      return Result.Err(new BadRequestError(UserMessages.NOT_EXIST, 'id'));
-    }
+    const user = await this.userRepo.findByIdOrFail(userId);
 
     const existingByNickname = await this.userRepo.findByNickname(username);
 
     if (existingByNickname && user.nickname !== username) {
-      return Result.Err(
-        new BadRequestError(
-          UserMessages.ALREADY_REGISTERED_BY_USERNAME,
-          'username',
-        ),
-      );
+      throw new DomainError({
+        tag: ErrorTag.VALIDATION_FAILED,
+        message: UserDomainMessages.ALREADY_REGISTERED_BY_USERNAME,
+        metadata: {
+          username: UserDomainMessages.ALREADY_REGISTERED_BY_USERNAME,
+        },
+      });
     }
-    const result = await this.checkCountryWithCity(countryId, cityId);
-    if (!result.isSuccess) {
-      return result;
-    }
+    const location = await this.checkCountryWithCity(countryId, cityId);
 
     user.update({ nickname: username });
     user.profile.update({
       firstName,
       lastName,
-      countryId: result.value.countryId,
-      cityId: result.value.cityId,
+      countryId: location.countryId,
+      cityId: location.cityId,
       dateOfBirth,
       aboutMe,
     });
-
-    console.log(user.profile.cityId);
-    console.log(user.profile.countryId);
 
     await this.userRepo.save(user);
 
@@ -78,41 +68,22 @@ export class UpdateProfileUseCase
   private async checkCountryWithCity(
     countryId?: number,
     cityId?: number,
-  ): Promise<
-    Result<{
-      cityId: number | null;
-      countryId: number | null;
-    }>
-  > {
-    if (cityId) {
-      const city = await this.countryRepo.getCityWithCounty(cityId, countryId);
+  ): Promise<{
+    cityId: number | null;
+    countryId: number | null;
+  }> {
+    const city = cityId
+      ? await this.countryRepo.getCityWithCountyOrFail(cityId, countryId)
+      : null;
 
-      if (!city) {
-        return Result.Err(new BadRequestError(NOT_EXIST, 'cityId'));
-      }
+    const country =
+      countryId || city?.countryId
+        ? await this.countryRepo.getCountryByIdOrFail(countryId)
+        : null;
 
-      return Result.Ok({
-        cityId: city.id,
-        countryId: city.countryId,
-      });
-    }
-
-    if (countryId) {
-      const country = await this.countryRepo.getCountryById(countryId);
-
-      if (!country) {
-        return Result.Err(new BadRequestError(NOT_EXIST, 'countryId'));
-      }
-
-      return Result.Ok({
-        cityId: null,
-        countryId: country.id,
-      });
-    }
-
-    return Result.Ok({
-      cityId: null,
-      countryId: null,
-    });
+    return {
+      cityId: city ? city.id : null,
+      countryId: country ? country.id : null,
+    };
   }
 }
