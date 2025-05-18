@@ -1,20 +1,18 @@
-import { CustomError } from '../../../../common/exeptions/custom.exeption';
-
 export class Result<T = null> {
   constructor(
     private readonly _isSuccess: boolean,
     private readonly _value: T | null = null,
-    private readonly _error: CustomError | null = null,
+    private readonly _error: Error | null = null,
   ) {}
 
   public static Ok<T = null>(value?: T): Result<T> {
     return new Result<T>(true, value);
   }
 
-  public static Err<T>(err: CustomError | string): Result<T> {
-    let error: CustomError = err as CustomError;
+  public static Err<T>(err: Error | string): Result<T> {
+    let error: Error = err as Error;
 
-    if (typeof err === 'string') error = new CustomError(err as string);
+    if (typeof err === 'string') error = new Error(err as string);
 
     return new Result<T>(false, null, error);
   }
@@ -23,8 +21,8 @@ export class Result<T = null> {
     return <T>this._value;
   }
 
-  get err(): CustomError {
-    return <CustomError>this._error;
+  get err(): Error {
+    return <Error>this._error;
   }
 
   get isSuccess(): boolean {

@@ -5,8 +5,8 @@ import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { RecaptchaSettings } from '../../../../../common/config/settings/recaptcha.settings';
 import { Result } from '../../../../../core/results/result';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 type RecaptchaResponse = {
   success: true | false;

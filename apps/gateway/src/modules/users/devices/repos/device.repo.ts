@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Not, Repository } from 'typeorm';
 import { Device } from '../../domain/device.entity';
-import { RepositoryNotFoundError } from '../../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../../common/errors/repository-not-found.error';
 
 @Injectable()
 export class DevicesRepo {

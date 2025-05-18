@@ -43,10 +43,8 @@ import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../../../common/config/configuration';
 import { FrontRedirectSettings } from '../../../../../common/config/settings/front-redirect.settings';
 import { AccessTokenGuard } from '../guards/access.guard';
-import { UNAUTHORIZED } from '../../../../../common/swagger/swagger.constants';
 import { AsyncStorageAdapter } from '../../../../../common/adapters/local-storage/local-storage.adapter';
 import { CurrentIp } from '../../../../../../../common/decorators/current-ip.decorator';
-import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
 import { GetProfileQueryCommand } from '../../../profiles/application/query.cases/get-profile.query-case';
 import { UserView } from '../../../../../common/views/user.view';
 import { ThrottlerGuard } from '@nestjs/throttler';
@@ -331,8 +329,6 @@ export class AuthController {
     const result = await this.queryBus.execute(
       new GetProfileQueryCommand(userId),
     );
-
-    if (!result.isSuccess) throw new UnauthorizedError(UNAUTHORIZED);
 
     return result.value;
   }

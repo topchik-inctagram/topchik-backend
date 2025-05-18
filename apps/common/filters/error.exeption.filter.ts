@@ -5,8 +5,8 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ExceptionCodes } from '../exeptions/custom.exeption';
 import { Environments } from '../config/enviroment.settings';
+import { HttpStatus } from './http-status';
 
 @Catch(Error)
 export class ErrorExceptionFilter implements ExceptionFilter {
@@ -17,12 +17,12 @@ export class ErrorExceptionFilter implements ExceptionFilter {
     if (process.env.ENV !== Environments.PRODUCTION) {
       console.error(exception.message);
       response
-        .status(ExceptionCodes.InternalServerError)
+        .status(HttpStatus.InternalServerError)
         .send({ error: exception.message, stack: exception.stack });
     } else {
       console.error(exception.message);
       response
-        .status(ExceptionCodes.InternalServerError)
+        .status(HttpStatus.InternalServerError)
         .send('Error! Server is not available!');
     }
   }

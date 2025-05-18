@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../domain/post.entity';
 import { IsNull, Repository } from 'typeorm';
 import { PostImage } from '../domain/post-image.entity';
-import { RepositoryNotFoundError } from '../../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../../common/errors/repository-not-found.error';
 
 @Injectable()
 export class PostRepo {

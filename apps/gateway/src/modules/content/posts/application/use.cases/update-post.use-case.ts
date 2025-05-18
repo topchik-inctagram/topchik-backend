@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PostRepo } from '../../repos/post.repo';
 import { Result } from '../../../../../core/results/result';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { PostsDomainMessages } from '../post-domain.message';
 
 export class UpdatePostCommand {

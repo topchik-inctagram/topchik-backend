@@ -3,8 +3,8 @@ import { UserRepo } from '../../../repos/user.repo';
 import { HashAdapter } from '../../../../../common/adapters/hash/hash.adapter';
 import { Result } from '../../../../../core/results/result';
 import { ConfirmationStatus } from '../../../domain/confirmation.entity';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class CheckCredentialsCommand {

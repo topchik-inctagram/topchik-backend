@@ -12,7 +12,7 @@ import { FileListDto } from '../../../../../storage/src/modules/images/applicati
 import { ImageResponseView } from '../../../../../common/views/image-response.view';
 import { Image } from '../../domain/image.entity';
 import { ImageListResponseView } from '../../../../../common/views/image-list-response.view';
-import { AdaptorError } from '../../errors/adaptor.error';
+import { AdaptorError } from '../../../../../common/errors/adaptor.error';
 import { UploadImageErrorMessages } from '../../constants/image.constants';
 
 @Injectable()

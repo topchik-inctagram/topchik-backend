@@ -5,8 +5,8 @@ import { CreateUserEvent } from '../../events/create-user.event';
 import { Result } from '../../../../../core/results/result';
 import { User } from '../../../domain/user.entity';
 import { RegistrationInputDto } from '../../api/dtos/registration.dto';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class RegistrationCommand {

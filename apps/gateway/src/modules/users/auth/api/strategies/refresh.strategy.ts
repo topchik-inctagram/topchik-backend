@@ -9,7 +9,8 @@ import {
   RefreshPayloadType,
 } from '../../../../../common/adapters/jwt/jwt.adapter';
 import { Configuration } from '../../../../../common/config/configuration';
-import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
+import { ApiError } from '../../../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
@@ -40,20 +41,26 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   async validate(
     payload: DecodedTokenType<RefreshPayloadType>,
   ): Promise<RefreshPayloadType> {
-    if (!payload) throw new UnauthorizedError('Wrong credentials');
+    try {
+      if (!payload) throw new Error();
 
-    const device = await this.devicesRepository.findByIdOrFail(
-      payload.deviceId,
-    );
+      const device = await this.devicesRepository.findByIdOrFail(
+        payload.deviceId,
+      );
 
-    if (!device) throw new UnauthorizedError('Wrong credentials');
+      if (!device) throw new Error('Wrong credentials');
 
-    if (payload.iat !== device.iat)
-      throw new UnauthorizedError('Wrong credentials');
+      if (payload.iat !== device.iat) throw new Error('Wrong credentials');
 
-    return {
-      userId: payload.userId,
-      deviceId: payload.deviceId,
-    };
+      return {
+        userId: payload.userId,
+        deviceId: payload.deviceId,
+      };
+    } catch (error) {
+      throw new ApiError({
+        message: 'User credentials did not match',
+        tag: ErrorTag.UNAUTHORIZED,
+      });
+    }
   }
 }

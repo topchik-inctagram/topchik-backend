@@ -5,8 +5,8 @@ import { Result } from '../../../../../core/results/result';
 import { DevicesRepo } from '../../../devices/repos/device.repo';
 import { BaseCheckRecoveryUseCase } from './base-check-recovery.use-case';
 import { User } from '../../../domain/user.entity';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class ChangePasswordCommand {

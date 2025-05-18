@@ -8,7 +8,7 @@ import { Recovery, RecoveryStatus } from '../domain/recovery.entity';
 import { Provider } from '../domain/provider.entity';
 import { Profile } from '../domain/profile.entity';
 import { Avatar } from '../domain/avatar.entity';
-import { RepositoryNotFoundError } from '../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../common/errors/repository-not-found.error';
 
 type EmailOrNickType = { email: string; nickname: string };
 

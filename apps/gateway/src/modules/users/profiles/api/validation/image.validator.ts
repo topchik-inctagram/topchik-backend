@@ -1,5 +1,6 @@
 import { HttpStatus, ParseFilePipeBuilder } from '@nestjs/common';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
+import { ApiError } from '../../../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 export type ImageOptionsType = {
   fileType: string;
@@ -18,7 +19,14 @@ export const ImageValidator = (imageOptions: ImageOptionsType) => {
     .build({
       errorHttpStatusCode: HttpStatus.BAD_REQUEST,
       exceptionFactory: (err) => {
-        throw new BadRequestError(err, 'file');
+        throw new ApiError({
+          message:
+            'File validation failed. Please check the format and try again',
+          tag: ErrorTag.VALIDATION_FAILED,
+          metadata: {
+            file: err,
+          },
+        });
       },
     });
 };

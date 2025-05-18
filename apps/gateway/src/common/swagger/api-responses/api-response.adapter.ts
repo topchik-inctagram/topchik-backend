@@ -23,7 +23,7 @@ import {
   TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from '../swagger.constants';
-import { BadRequestResponse } from '../../../../../common/views/response.view';
+import { ErrorResponse } from '../../../../../common/views/response.view';
 
 export abstract class ApiResponseAdapter {
   static getSummary(summary: string = 'Some summary') {
@@ -71,25 +71,28 @@ export abstract class ApiResponseAdapter {
   static getUnauthorizedResponse(description: string | null) {
     return ApiUnauthorizedResponse({
       description: description ?? UNAUTHORIZED,
+      type: ErrorResponse,
     });
   }
 
   static getForbiddenResponse(description: string | null) {
     return ApiForbiddenResponse({
       description: description ?? FORBIDDEN,
+      type: ErrorResponse,
     });
   }
 
   static getBadRequestResponse(description: string | null) {
     return ApiBadRequestResponse({
       description: description ?? BAD_REQUEST,
-      type: BadRequestResponse,
+      type: ErrorResponse,
     });
   }
 
   static getNotFoundResponse(description: string | null) {
     return ApiNotFoundResponse({
       description: description ?? NOT_FOUND,
+      type: ErrorResponse,
     });
   }
 

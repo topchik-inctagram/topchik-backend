@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Country } from '../domain/country.entity';
 import { Repository } from 'typeorm';
 import { City } from '../domain/city.entity';
-import { RepositoryNotFoundError } from '../../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../../common/errors/repository-not-found.error';
 
 @Injectable()
 export class CountryRepo {

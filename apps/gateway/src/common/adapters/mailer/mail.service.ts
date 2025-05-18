@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../config/configuration';
 import { FrontRedirectSettings } from '../../config/settings/front-redirect.settings';
 import { AsyncStorageAdapter } from '../local-storage/local-storage.adapter';
+import { AdaptorError } from '../../../../../common/errors/adaptor.error';
+import { AppLoggerService } from '../../../../../common/logger/logger.service';
 
 @Injectable()
 export class MailService {
@@ -14,6 +16,7 @@ export class MailService {
     private mailerService: MailerService,
     private configService: ConfigService<Configuration, true>,
     private asyncStorageService: AsyncStorageAdapter,
+    private logger: AppLoggerService,
   ) {
     this.mailConfig = this.configService.get<FrontRedirectSettings>(
       'frontRedirectSettings',
@@ -41,8 +44,9 @@ export class MailService {
       });
 
       return;
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      this.logger.error(`Failed to send mail`, error);
+      throw new AdaptorError(`Failed to send mail`);
     }
   }
 
@@ -65,8 +69,9 @@ export class MailService {
         html: message,
       });
       return;
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      this.logger.error(`Failed to send mail`, error);
+      throw new AdaptorError(`Failed to send mail`);
     }
   }
 }

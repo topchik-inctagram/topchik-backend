@@ -3,12 +3,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from '../../../../../common/config/configuration';
-import { UnauthorizedError } from '../../../../../../../common/exeptions/custom.exeption';
 import {
   AccessPayloadType,
   DecodedTokenType,
 } from '../../../../../common/adapters/jwt/jwt.adapter';
 import { UserRepo } from '../../../repos/user.repo';
+import { ApiError } from '../../../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 @Injectable()
 export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
@@ -27,12 +28,17 @@ export class AccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   async validate(
     payload: DecodedTokenType<AccessPayloadType>,
   ): Promise<AccessPayloadType> {
-    if (!payload) throw new UnauthorizedError('Wrong credentials');
+    try {
+      if (!payload) throw new Error();
 
-    const user = await this.usersRepository.findByIdOrFail(payload.userId);
+      const user = await this.usersRepository.findByIdOrFail(payload.userId);
 
-    if (!user) throw new UnauthorizedError('Wrong credentials');
-
-    return { userId: payload.userId };
+      return { userId: user.id };
+    } catch (error) {
+      throw new ApiError({
+        message: 'User credentials did not match',
+        tag: ErrorTag.UNAUTHORIZED,
+      });
+    }
   }
 }

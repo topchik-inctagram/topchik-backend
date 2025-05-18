@@ -3,8 +3,8 @@ import { ProfileInputDto } from '../../api/dtos/profile-input.dto';
 import { UserRepo } from '../../../repos/user.repo';
 import { Result } from '../../../../../core/results/result';
 import { CountryRepo } from '../../../../reference/country-cities/repos/country-repo';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export class UpdateProfileCommand {

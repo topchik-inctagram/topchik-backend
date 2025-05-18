@@ -5,7 +5,7 @@ import { User } from '../domain/user.entity';
 import { IsNull, Repository } from 'typeorm';
 import { Avatar } from '../domain/avatar.entity';
 import { ImageView } from '../../../common/views/image.view';
-import { RepositoryNotFoundError } from '../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../common/errors/repository-not-found.error';
 
 @Injectable()
 export class UserQueryRepo {

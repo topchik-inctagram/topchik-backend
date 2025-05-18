@@ -4,7 +4,7 @@ import { PostsWithCursorView } from '../../../../common/views/posts-with-cursor.
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, LessThan, Repository } from 'typeorm';
 import { Post } from '../domain/post.entity';
-import { RepositoryNotFoundError } from '../../../../common/errors/repository-not-found.error';
+import { RepositoryNotFoundError } from '../../../../../../common/errors/repository-not-found.error';
 
 export const USER_POST_LIMIT = 8;
 export const POST_LIMIT = 4;

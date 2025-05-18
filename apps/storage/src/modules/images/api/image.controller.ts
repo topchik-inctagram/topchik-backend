@@ -16,12 +16,13 @@ import { ImageQueryRepo } from '../repositories/image.query.repo';
 import { ImageMetaType } from '../../../../../common/types/image/image.dto';
 import { SaveImageCommand } from '../application/save-image.use-case';
 import { ImageResponseView } from '../../../../../common/views/image-response.view';
-import { NotFoundError } from '../../../../../common/exeptions/custom.exeption';
 import { NOT_FOUND } from '../../../../../gateway/src/common/swagger/swagger.constants';
 import { FileListDto } from '../application/dtos/file-list.dto';
 import { ImageListResponseView } from '../../../../../common/views/image-list-response.view';
 import { SaveImageListCommand } from '../application/save-image-list.use-case';
 import { ParseImageMeta } from './decorators/parse-image-meta';
+import { ApiError } from '../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../common/errors/error.tag';
 
 @Controller('image')
 export class ImageController {
@@ -76,7 +77,11 @@ export class ImageController {
   async getById(@Param('id') imageId: string): Promise<ImageResponseView> {
     const image = await this.imageQueryRepo.getById(imageId);
 
-    if (!image) throw new NotFoundError(NOT_FOUND);
+    if (!image)
+      throw new ApiError({
+        message: NOT_FOUND,
+        tag: ErrorTag.NOT_FOUND,
+      });
 
     return image;
   }

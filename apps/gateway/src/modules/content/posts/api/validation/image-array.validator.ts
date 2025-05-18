@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
 import {
   ImageOptionsType,
   ImageValidator,
 } from '../../../../users/profiles/api/validation/image.validator';
-import { BadRequestError } from '../../../../../../../common/exeptions/custom.exeption';
+import { ApiError } from '../../../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 @Injectable()
 export class ImageArrayValidatorPipe implements PipeTransform {
@@ -11,14 +12,25 @@ export class ImageArrayValidatorPipe implements PipeTransform {
 
   async transform(files: Array<Express.Multer.File>) {
     if (!Array.isArray(files)) {
-      throw new BadRequestException('Файлы должны быть переданы в массиве.');
+      throw new ApiError({
+        message:
+          'File validation failed. Please check the format and try again',
+        tag: ErrorTag.VALIDATION_FAILED,
+        metadata: {
+          files: 'Should be array of files',
+        },
+      });
     }
 
     if (files.length > 10) {
-      throw new BadRequestError(
-        'The maximum number of images allowed is 10',
-        'files',
-      );
+      throw new ApiError({
+        message:
+          'File validation failed. Please check the format and try again',
+        tag: ErrorTag.VALIDATION_FAILED,
+        metadata: {
+          files: 'The maximum number of images allowed is 10',
+        },
+      });
     }
 
     for (const file of files) {

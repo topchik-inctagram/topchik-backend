@@ -1,8 +1,8 @@
 import { UserRepo } from '../../../repos/user.repo';
 import { Result } from '../../../../../core/results/result';
 import { User } from '../../../domain/user.entity';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { UserDomainMessages } from '../../../domain/usser-domain.message';
 
 export abstract class BaseCheckRecoveryUseCase {

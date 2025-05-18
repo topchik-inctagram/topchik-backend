@@ -1,6 +1,7 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CustomOAuthError } from '../../../../../common/exeptions/oauth.exeption';
+import { ApiError } from '../../../../../../../common/errors/api.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 
 @Injectable()
 export class GoogleOauthGuard extends AuthGuard('google') {
@@ -8,15 +9,13 @@ export class GoogleOauthGuard extends AuthGuard('google') {
     super();
   }
 
-  handleRequest<Profile>(
-    err: any | null,
-    user: Profile,
-    _info: {},
-    _context: ExecutionContext,
-    _status?: any,
-  ) {
+  handleRequest<Profile>(err: any | null, user: Profile) {
     if (err || !user) {
-      throw new CustomOAuthError('googleOauth');
+      throw new ApiError({
+        message: `Couldn't sign in with Google. Please try again or use another method`,
+        tag: ErrorTag.UNAUTHORIZED,
+        oauth: true,
+      });
     } else {
       return user;
     }

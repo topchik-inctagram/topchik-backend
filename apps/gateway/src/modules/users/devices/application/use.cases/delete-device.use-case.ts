@@ -1,8 +1,8 @@
 import { DevicesRepo } from '../../repos/device.repo';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Result } from '../../../../../core/results/result';
-import { DomainError } from '../../../../../common/errors/domain.error';
-import { ErrorTag } from '../../../../../common/errors/error.tag';
+import { DomainError } from '../../../../../../../common/errors/domain.error';
+import { ErrorTag } from '../../../../../../../common/errors/error.tag';
 import { DeviceDomainMessages } from '../device-domain.message';
 
 export class DeleteDeviceCommand {

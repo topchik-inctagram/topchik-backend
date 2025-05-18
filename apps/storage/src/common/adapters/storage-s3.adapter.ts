@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-
 import { ConfigService } from '@nestjs/config';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { StorageConfiguration } from '../config/storage-configuration';
 import { BucketSettings } from '../config/settings/bucket.settings';
 import { Upload } from '@aws-sdk/lib-storage';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { S3Errors } from '../../../../common/exeptions/custom.exeption';
+import { AdaptorError } from '../../../../common/errors/adaptor.error';
 
 @Injectable()
 export class StorageS3Adapter {
@@ -54,7 +53,7 @@ export class StorageS3Adapter {
       return data.ETag;
     } catch (err) {
       console.error('Error uploading file:', err);
-      throw new S3Errors('Error uploading file');
+      throw new AdaptorError('Error uploading file');
     }
   }
 
@@ -69,33 +68,4 @@ export class StorageS3Adapter {
       expiresIn: 604800,
     });
   }
-
-  //   async removeFile({ small, medium, original }: UrlsType) {
-  //     try {
-  //       await Promise.all([
-  //         this.s3Client.send(
-  //           new DeleteObjectCommand({
-  //             Bucket: this.bucketName,
-  //             Key: small,
-  //           }),
-  //         ),
-  //         this.s3Client.send(
-  //           new DeleteObjectCommand({
-  //             Bucket: this.bucketName,
-  //             Key: medium,
-  //           }),
-  //         ),
-  //         this.s3Client.send(
-  //           new DeleteObjectCommand({
-  //             Bucket: this.bucketName,
-  //             Key: original,
-  //           }),
-  //         ),
-  //       ]);
-  //     } catch (error) {
-  //       console.error('Error deleting object:', error);
-  //     }
-  //   }
-  //
-  //   return;
 }
