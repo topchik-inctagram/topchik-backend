@@ -1,6 +1,6 @@
-import { PaymentProvider } from '../../../../core/db/enum';
+import { PaymentProvider } from '../../../../common/db/enum';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PaymentContext } from '../../../../core/strategies/payment-context';
+import { PaymentContext } from '../../../../common/strategies/payment-context';
 
 export class CreateSubscriptionCommand {
   constructor(

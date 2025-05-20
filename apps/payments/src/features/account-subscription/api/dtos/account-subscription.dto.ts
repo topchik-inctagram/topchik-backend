@@ -1,4 +1,4 @@
-import { PaymentProvider } from '../../../../core/db/enum';
+import { PaymentProvider } from '../../../../common/db/enum';
 import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class AccountSubscriptionDto {

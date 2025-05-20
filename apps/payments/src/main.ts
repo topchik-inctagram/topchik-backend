@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { PaymentsModule } from './payments.module';
 import { ConfigService } from '@nestjs/config';
 import { getAppConnectSettings } from '../../common/config/get-app-connect-settings';
-import { PaymentsConfiguration } from './core/config/payments-configuration';
-import { configApp } from './core/config/app.config';
+import { PaymentsConfiguration } from './common/config/payments-configuration';
+import { configApp } from './common/config/app.config';
 import { AppLoggerService } from '../../common/logger/logger.service';
 
 async function bootstrap() {

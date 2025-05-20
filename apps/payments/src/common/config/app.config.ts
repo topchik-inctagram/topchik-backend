@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import { useContainer } from 'class-validator';
 import { PaymentsModule } from '../../payments.module';
 import { pipesSetup } from '../../../../common/pipe/global.pipe';
-import { filterSetup } from './filter/global.filter';
+import { filterSetup } from '../../../../common/filters/filter-setup';
 
 export function configApp(app: INestApplication) {
   app.use(cookieParser());

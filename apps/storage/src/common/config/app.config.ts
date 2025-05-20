@@ -1,9 +1,9 @@
 import { useContainer } from 'class-validator';
 import { INestApplication } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-import { filterSetup } from '../filter/global.filter';
 import { UploadsModule } from '../../uploads.module';
 import { pipesSetup } from '../../../../common/pipe/global.pipe';
+import { filterSetup } from '../../../../common/filters/filter-setup';
 
 export function configApp(app: INestApplication) {
   app.use(cookieParser());

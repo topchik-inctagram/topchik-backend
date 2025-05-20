@@ -4,8 +4,8 @@ import { Environments } from '../../common/config/enviroment.settings';
 import { ConfigModule } from '@nestjs/config';
 import configuration, {
   getFilePath,
-} from './core/config/payments-configuration';
-import { DatabaseModule } from './core/db/db.module';
+} from './common/config/payments-configuration';
+import { DatabaseModule } from './common/db/db.module';
 import { AccountSubscriptionModule } from './features/account-subscription/account-subscription.module';
 import { AppLoggerService } from '../../common/logger/logger.service';
 

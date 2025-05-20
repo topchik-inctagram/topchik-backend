@@ -55,6 +55,7 @@ import {
   AccessPayloadType,
   RefreshPayloadType,
 } from '../../../../../common/adapters/jwt/jwt.adapter';
+import { AuthPath } from '../../../../../common/paths/auth.path';
 
 export class ResponseAccessTokenDto {
   @ApiProperty()
@@ -66,7 +67,7 @@ export class ResponseAccessTokenDto {
 }
 
 @ApiTags('Auth')
-@Controller('auth')
+@Controller(AuthPath.controller)
 export class AuthController {
   config: FrontRedirectSettings;
 
@@ -81,7 +82,7 @@ export class AuthController {
     );
   }
 
-  @Post('registration')
+  @Post(AuthPath.registration)
   @ApiResponseFactory(AuthSwagger.registration, {
     204: AuthSwagger.registrationOk,
     400: null,
@@ -97,7 +98,7 @@ export class AuthController {
     return;
   }
 
-  @Post('registration-confirmation')
+  @Post(AuthPath.registrationConfirmation)
   @ApiResponseFactory(AuthSwagger.confirm, {
     204: AuthSwagger.confirmOk,
     400: null,
@@ -115,7 +116,7 @@ export class AuthController {
     return;
   }
 
-  @Post('registration-email-resending')
+  @Post(AuthPath.registrationEmailResending)
   @ApiResponseFactory(AuthSwagger.resending, {
     204: AuthSwagger.resendingOk,
     400: null,
@@ -133,7 +134,7 @@ export class AuthController {
     return;
   }
 
-  @Post('login')
+  @Post(AuthPath.login)
   @ApiResponseFactory(AuthSwagger.login, {
     200: { body: ResponseAccessTokenDto, message: AuthSwagger.jwtOk },
     400: null,
@@ -157,7 +158,7 @@ export class AuthController {
     return new ResponseAccessTokenDto(accessToken);
   }
 
-  @Post('refresh-token')
+  @Post(AuthPath.refreshToken)
   @ApiResponseFactory(AuthSwagger.rT, {
     200: { body: ResponseAccessTokenDto, message: AuthSwagger.jwtOk },
     401: null,
@@ -180,7 +181,7 @@ export class AuthController {
     return new ResponseAccessTokenDto(accessToken);
   }
 
-  @Post('logout')
+  @Post(AuthPath.logout)
   @ApiResponseFactory(AuthSwagger.logout, {
     204: null,
     401: null,
@@ -200,7 +201,7 @@ export class AuthController {
     return;
   }
 
-  @Post('password-recovery')
+  @Post(AuthPath.passwordRecovery)
   @ApiResponseFactory(AuthSwagger.passRecovery, {
     204: AuthSwagger.passRecoveryOk,
     400: null,
@@ -218,7 +219,7 @@ export class AuthController {
     return;
   }
 
-  @Post('check-recovery-code')
+  @Post(AuthPath.checkRecoveryCode)
   @ApiResponseFactory(AuthSwagger.checkRecovery, {
     200: null,
     400: null,
@@ -232,7 +233,7 @@ export class AuthController {
     return;
   }
 
-  @Post('new-password')
+  @Post(AuthPath.newPassword)
   @ApiResponseFactory(AuthSwagger.newPass, {
     204: null,
     400: null,
@@ -250,7 +251,7 @@ export class AuthController {
     return;
   }
 
-  @Get('google')
+  @Get(AuthPath.google)
   @ApiResponseFactory(AuthSwagger.google, {
     200: { message: AuthSwagger.googleOk },
     401: null,
@@ -260,7 +261,7 @@ export class AuthController {
     return;
   }
 
-  @Get('google/redirect')
+  @Get(AuthPath.googleRedirect)
   @ApiResponseFactory(AuthSwagger.googleRedirect, {
     200: { message: AuthSwagger.googleRedirectOk },
     401: null,
@@ -283,7 +284,7 @@ export class AuthController {
     return response.redirect(profileUrl);
   }
 
-  @Get('github')
+  @Get(AuthPath.github)
   @ApiResponseFactory(AuthSwagger.github, {
     200: { message: AuthSwagger.githubOk },
     401: null,
@@ -293,7 +294,7 @@ export class AuthController {
     return;
   }
 
-  @Get('github/redirect')
+  @Get(AuthPath.githubRedirect)
   @ApiResponseFactory(AuthSwagger.githubRedirect, {
     200: { message: AuthSwagger.githubRedirectOk },
     401: null,
@@ -316,7 +317,7 @@ export class AuthController {
     return response.redirect(profileUrl);
   }
 
-  @Get('me')
+  @Get(AuthPath.me)
   @ApiResponseFactory(ProfileEnum.myProfile, {
     200: { body: UserView },
     401: null,
