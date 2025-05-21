@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: DEPLOYMENT_NAME
+  namespace: NAMESPACE
+  labels:
+    app: PROJECT
+spec:
+  selector:
+    matchLabels:
+      project: PROJECT
+  template:
+    metadata:
+      namespace: NAMESPACE
+      labels:
+        project: PROJECT
+    spec:
+      containers:
+         - name: PROJECT
+           image: REGISTRY_HOSTNAME/PROJECT:TAG_VERSION
+           ports:
+             - containerPort: PORT_CONTAINER
+
+           env:
+             - name: API_PREFIX
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: API_PREFIX
+             - name: ACCESS_TOKEN_SECRET
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: ACCESS_TOKEN_SECRET
+             - name: REFRESH_TOKEN_SECRET
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: REFRESH_TOKEN_SECRET
+             - name: ACCESS_TOKEN_EXP
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: ACCESS_TOKEN_EXP
+             - name: REFRESH_TOKEN_EXP
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: REFRESH_TOKEN_EXP
+             - name: MAIL_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: MAIL_PASSWORD
+             - name: MAIL_USER
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: MAIL_USER
+             - name: OAUTH_GOOGLE_ID
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: OAUTH_GOOGLE_ID
+             - name: OAUTH_GOOGLE_SECRET
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: OAUTH_GOOGLE_SECRET
+             - name: OAUTH_GOOGLE_REDIRECT_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: OAUTH_GOOGLE_REDIRECT_URL
+             - name: GITHUB_CLIENT_ID
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: GITHUB_CLIENT_ID
+             - name: GITHUB_CLIENT_SECRET
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: GITHUB_CLIENT_SECRET
+             - name: GITHUB_CALLBACK_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: GITHUB_CALLBACK_URL
+             - name: GITHUB_API_GET_EMAIL_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: GITHUB_API_GET_EMAIL_URL
+             - name: RECAPTCHA_KEY
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: RECAPTCHA_KEY
+             - name: RECAPTCHA_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: RECAPTCHA_URL
+             - name: PROD_DOMAIN
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: PROD_DOMAIN
+             - name: STORAGE_UPLOAD_IMAGE_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: STORAGE_UPLOAD_IMAGE_URL
+             - name: STORAGE_UPLOAD_IMAGE_LIST_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: STORAGE_UPLOAD_IMAGE_LIST_URL
+             - name: PROFILE_REDIRECT
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: PROFILE_REDIRECT
+             - name: SING_UP_REDIRECT
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: SING_UP_REDIRECT
+             - name: REGISTRATION_REDIRECT
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: REGISTRATION_REDIRECT
+             - name: RECOVERY_REDIRECT
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: RECOVERY_REDIRECT
+             - name: RECOVERY_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: RECOVERY_URL
+             - name: REGISTRATION_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: REGISTRATION_URL
+             - name: DATABASE_URL
+               valueFrom:
+                 secretKeyRef:
+                   name: topchik-backend-production-config-secret
+                   key: DATABASE_URL
