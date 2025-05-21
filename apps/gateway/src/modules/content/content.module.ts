@@ -11,8 +11,13 @@ import { PostQueryRepo } from './posts/repos/post.query.repo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './posts/domain/post.entity';
 import { PostImage } from './posts/domain/post-image.entity';
+import { GetUserPostListQueryCase } from './posts/application/query.cases/get-user-post-list.query-case';
 
-const queryCases = [GetPostQueryCase, GetPostListQueryCase];
+const queryCases = [
+  GetPostQueryCase,
+  GetPostListQueryCase,
+  GetUserPostListQueryCase,
+];
 const useCases = [CreatePostUseCase, DeletePostUseCase, UpdatePostUseCase];
 const repos = [PostRepo, PostQueryRepo];
 

@@ -90,14 +90,11 @@ export class PostQueryRepo {
       },
       order: {
         createdAt: 'desc',
-        images: {
-          image: {
-            id: 'asc',
-          },
-        },
       },
       take: USER_POST_LIMIT + 1,
     });
+
+    console.log(posts.length);
 
     return PostsWithCursorView.builder(posts);
   }

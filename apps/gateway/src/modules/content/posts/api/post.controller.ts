@@ -87,7 +87,7 @@ export class PostController {
     const result = await this.queryBus.execute<
       GetUserPostListQueryCommand,
       Result<PostsWithCursorView>
-    >(new GetUserPostListQueryCommand(cursor, id));
+    >(new GetUserPostListQueryCommand(id, cursor));
 
     if (!result.isSuccess) throw result.err;
     return result.value;
